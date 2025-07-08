@@ -1,0 +1,522 @@
+---
+sidebar_position: 2
+---
+
+import { AddOrders } from './_data/order';
+import { GetOrders } from './_data/order';
+import { GetOrder } from './_data/order';
+import CodeBlock from '@theme/CodeBlock';
+import ReadingTime from '../../src/components/reading-time/reading-time';
+
+# Order
+
+<ReadingTime/>
+<br/>
+
+## Overview
+
+The **Order RestAPI** allows you to manage orders within the Fleet Management system. You can create, retrieve, update, and delete order records. This RestAPI supports filtering, sorting, and pagination to help manage large datasets efficiently.
+
+### Order Object Fields
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>id</code></td>
+      <td>Integer</td>
+      <td>Unique identifier for the order.</td>
+    </tr>
+    <tr>
+      <td><code>customerInfo</code></td>
+      <td>Object</td>
+      <td>Customer details linked to the order. Cannot be changed once saved.</td>
+    </tr>
+    <tr>
+      <td><code>location</code></td>
+      <td>Object</td>
+      <td>Location details of the order.</td>
+    </tr>
+    <tr>
+      <td><code>alias</code></td>
+      <td>String</td>
+      <td>Short name or identifier for the order.</td>
+    </tr>
+    <tr>
+      <td><code>firstName</code></td>
+      <td>String</td>
+      <td>First name of the customer.</td>
+    </tr>
+    <tr>
+      <td><code>lastName</code></td>
+      <td>String</td>
+      <td>Last name of the customer.</td>
+    </tr>
+    <tr>
+      <td><code>address</code></td>
+      <td>Object</td>
+      <td>Address details of the order.</td>
+    </tr>
+    <tr>
+      <td><code>phoneNumber</code></td>
+      <td>String</td>
+      <td>Contact number for the order.</td>
+    </tr>
+    <tr>
+      <td><code>customData</code></td>
+      <td>String</td>
+      <td>Additional order-specific data.</td>
+    </tr>
+    <tr>
+      <td><code>type</code></td>
+      <td>Integer</td>
+      <td>
+        <div>Order type:</div>
+        <div><code>0</code> - Pickup</div>
+        <div><code>1</code> - Delivery</div>
+      </td>
+    </tr>
+    <tr>
+      <td><code>status</code></td>
+      <td>Integer</td>
+      <td>
+        <div>Order status:</div>
+        <div><code>0</code> - Unscheduled</div>
+        <div><code>1</code> - Scheduled</div>
+      </td>
+    </tr>
+    <tr>
+      <td><code>state</code></td>
+      <td>Integer</td>
+      <td>
+        <div>Order state:</div>
+        <div><code>0</code> - None</div>
+        <div><code>1</code> - On Route</div>
+        <div><code>2</code> - Servicing</div>
+        <div><code>3</code> - Rejected</div>
+        <div><code>4</code> - Completed</div>
+        <div><code>5</code> - Failed</div>
+      </td>
+    </tr>
+    <tr>
+      <td><code>priority</code></td>
+      <td>Integer</td>
+      <td>
+        <div>Order priority:</div>
+        <div><code>0</code> - Low</div>
+        <div><code>1</code> - High</div>
+      </td>
+    </tr>
+    <tr>
+      <td><code>numberOfPackages</code></td>
+      <td>Integer</td>
+      <td>Number of packages in the order.</td>
+    </tr>
+    <tr>
+      <td><code>weight</code></td>
+      <td>Float</td>
+      <td>Total weight of the order.</td>
+    </tr>
+    <tr>
+      <td><code>cube</code></td>
+      <td>Float</td>
+      <td>Total volume of the order.</td>
+    </tr>
+    <tr>
+      <td><code>timeWindow</code></td>
+      <td>Object</td>
+      <td>Time window during which the order should be serviced.</td>
+    </tr>
+    <tr>
+      <td><code>serviceTime</code></td>
+      <td>Integer</td>
+      <td>Time (in seconds) required to complete the order.</td>
+    </tr>
+    <tr>
+      <td><code>revenue</code></td>
+      <td>Float</td>
+      <td>Revenue associated with the order.</td>
+    </tr>
+    <tr>
+      <td><code>depotId</code></td>
+      <td>Integer</td>
+      <td>Depot associated with the order.</td>
+    </tr>
+    <tr>
+      <td><code>creationTimestamp</code></td>
+      <td>Integer</td>
+      <td>Timestamp of when the order was created.</td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
+## Endpoints
+
+### 1. Create Order
+
+**Description:** Adds a list of orders to the database.
+
+- **Method:** `POST`
+- **Endpoint:** `/orders`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+  - `Content-Type: application/json`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/orders`  
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>
+        <ul style={{ margin: 0, paddingLeft: "20px" }}>
+          <li>The order’s customer was not found/doesn’t exist.</li>
+          <li>The order doesn’t have the coordinates set.</li>
+          <li>The time window format is wrong.</li>
+          <li>The number of packages/weight/cubic volume has a negative value or exceeds the maximum limit.</li>
+          <li>The orders’ phone number has wrong format.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+
+:::info[Note]
+ If the operation is successful, the `Order` object will have its `id` field populated. If the operation fails, an error code is returned, which can be interpreted as described in the **Returned error codes** section.
+:::
+
+#### Example:
+
+- **Request Body:**
+
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+<CodeBlock language="json">
+{JSON.stringify(AddOrders, null, 2)}
+</CodeBlock>
+</div>
+
+- **Response Body:** (error code `200`)
+
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+<CodeBlock language="json">
+{JSON.stringify(GetOrders, null, 2)}
+</CodeBlock>
+</div>
+---
+
+### 2. Get All Orders
+
+**Description:** Fetches a list of all orders with optional filtering.
+
+- **Method:** `GET`
+- **Endpoint:** `/orders`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/orders`
+- **Query Parameters:**
+  - `search` (string, *optional*) – General search term across orders.  
+  - `id` (string, *optional*) – Filter by order ID (`id=value:exact` for exact match).  
+  - `alias` (string, *optional*) – Filter by order alias (`alias=value:exact` for exact match).  
+  - `firstName` (string, *optional*) – Filter by first name (`firstName=value:exact` for exact match).  
+  - `lastName` (string, *optional*) – Filter by last name (`lastName=value:exact` for exact match).  
+  - `location` (string, *optional*) – Filter by location (`location=value:exact` for exact match).  
+  - `country` (string, *optional*) – Filter by country (`country=value:exact` for exact match).  
+  - `state` (string, *optional*) – Filter by state (`state=value:exact` for exact match).  
+  - `county` (string, *optional*) – Filter by county (`county=value:exact` for exact match).  
+  - `city` (string, *optional*) – Filter by city (`city=value:exact` for exact match).  
+  - `postalCode` (string, *optional*) – Filter by postal code (`postalCode=value:exact` for exact match).  
+  - `streetName` (string, *optional*) – Filter by street name (`streetName=value:exact` for exact match).  
+  - `streetNumber` (string, *optional*) – Filter by street number (`streetNumber=value:exact` for exact match).  
+  - `extra` (string, *optional*) – Filter by extra address value (`extra=value:exact` for exact match).  
+  - `phoneNumber` (string, *optional*) – Filter by phone number (`phoneNumber=value:exact` for exact match).  
+  - `type` (string, *optional*) – Filter by order type.  
+  - `status` (string, *optional*) – Filter by order status.  
+  - `orderState` (string, *optional*) – Filter by order state.  
+  - `timeWindowStart` (string, *optional*) – Filter by time window start (`timeWindowStart=value:exact` for exact match).  
+  - `timeWindowEnd` (string, *optional*) – Filter by time window end (`timeWindowEnd=value:exact` for exact match).  
+  - `creationTime` (string, *optional*) – Filter by creation time (`creationTime=value:exact` for exact match).  
+  - `priority` (string, *optional*) – Filter by order priority.  
+  - `customData` (string, *optional*) – Filter by custom data (`customData=value:exact` for exact match).  
+  - `customerId` (string, *optional*) – Filter by customer ID (`customerId=value:exact` for exact match).  
+  - `depotId` (string, *optional*) – Filter by depot/misc location ID (`depotId=value:exact` for exact match).  
+  - `sort` (string, *optional*) – Sorting format: `column1:asc/desc,column2:asc/desc`
+                                    - Available columns: `id, alias, firstName, lastName, latitude, longitude, country, state, county, city, postalCode, streetName, streetNumber, extra, phoneNumber, type, timeWindowStart, timeWindowEnd, creationTime, serviceTime, priority, customData, customerId, depotId`
+  - `includeColumns` (string, *optional*) – Specify which columns to include. 
+                                              - Available columns: `id, alias, firstName, lastName, phoneNumber, type,timeWindowStart, timeWindowEnd, serviceTime, creationTime, packages, revenue, cube, weight, priority, status, orderState, customerId, depotId, latitude, longitude, country, state, county, city, postalCode, streetName, streetNumber, extra`
+  - `page` (integer, *optional*) – Page number for pagination.
+  - `per_page` (integer, *optional*) – Number of items per page.
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>The values sent for page and per_page parameters are incorrect; should be greater than 0.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+  
+#### Example:
+
+- **Response Body:** (error code `200`)
+
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+<CodeBlock language="json">
+{JSON.stringify(GetOrders, null, 2)}
+</CodeBlock>
+</div>
+---
+
+### 3. Get an Order by ID
+
+**Description:** Retrieves a specific order by ID.
+
+- **Method:** `GET`
+- **Endpoint:** `/orders/{id}`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/orders/{id}`  
+- **Path Parameter:**
+  - `id` (integer, **required*) - The unique order ID.
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Invalid input or missing required fields.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>404 Not Found</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Order not found in database.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Example:
+
+- **Response Body:** (error code `200`)
+
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+<CodeBlock language="json">
+{JSON.stringify(GetOrder, null, 2)}
+</CodeBlock>
+</div>
+
+---
+
+### 4. Update an Order
+
+**Description:** Updates an existing order record.
+
+- **Method:** `PUT`
+- **Endpoint:** `/orders/{id}`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+  - `Content-Type: application/json`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/orders/{id}`  
+- **Path Parameter:**
+  - `id` (integer, **required*) - The unique order ID.
+- **Query Parameter:**  
+  -`autoAssignDepot`(integer, *optional*) (  `0`: (default) - No depot will be auto assigned to the current order.
+                                             `1`: The closest depot (depending on time) will be assigned to the current order.)
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>
+        <ul style={{ margin: 0, paddingLeft: "20px" }}>
+          <li>The order’s customer was not found/doesn’t exist.</li>
+          <li>The order doesn’t have the coordinates set.</li>
+          <li>The time window format is wrong.</li>
+          <li>The number of packages/weight/cubic volume has a negative value or exceeds the maximum limit.</li>
+          <li>The orders’ phone number has wrong format.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>404 Not Found</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Order not found in database.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+  
+#### Example:
+
+- **Request Body:**
+
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+<CodeBlock language="json">
+{JSON.stringify(GetOrder, null, 2)}
+</CodeBlock>
+</div>
+
+- **Response Body:** (error code `200`)
+
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+<CodeBlock language="json">
+{JSON.stringify(GetOrder, null, 2)}
+</CodeBlock>
+</div>
+
+---
+
+### 5. Delete Orders
+
+**Description:** Deletes orders from the system.
+
+- **Method:** `DELETE`
+- **Endpoint:** `/orders`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+  - `Content-Type: application/json`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/orders`
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Invalid input or missing required fields.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>404 Not Found</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Can't delete orders because at least one of them does not exist or is used in another operation.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Example:
+
+- **Request Body:**
+```json
+{
+  "ids": [78910, 78911]
+}
+```
+
+- **Response Body:** (error code `200`)
+```json
+{
+  "message": "Operation done successfully",
+}
+```
+---
+
+
+

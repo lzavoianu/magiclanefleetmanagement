@@ -1,0 +1,109 @@
+---
+sidebar_position: 6
+---
+
+# Vehicle Constraints  
+
+import ReadingTime from '../../src/components/reading-time/reading-time';
+
+<ReadingTime/>
+<br/>
+
+## Overview  
+``Vehicle Constraints`` class in Fleet Management RestAPI define the limitations and requirements applied to a vehicle during the route optimization process. These constraints ensure that the vehicle operates within its capabilities, such as capacity, distance, and revenue limits. Properly configuring these constraints ensures that the optimization algorithm generates feasible and efficient routes for the vehicle.  
+
+## Vehicle Constraints Structure  
+
+Each Vehicle Constraint consists of:  
+
+<table>
+  <colgroup>
+    <col style={{ width: '20%' }} />
+    <col style={{ width: '14%' }} />
+    <col style={{ width: '66%' }} />
+  </colgroup>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>StartDate</b></td>
+      <td><code>Integer</code></td>
+      <td>The date when the vehicle starts its route. Default is the current UTC time.</td>
+    </tr>
+    <tr>
+      <td><b>MaxNumberOfPackages</b></td>
+      <td><code>Integer</code></td>
+      <td>The maximum number of packages that the vehicle can carry. Default is <code>INT_MAX</code>.</td>
+    </tr>
+    <tr>
+      <td><b>MinNumberOfOrders</b></td>
+      <td><code>Integer</code></td>
+      <td>The minimum number of orders that the vehicle must visit. Default is <code>0</code>.</td>
+    </tr>
+    <tr>
+      <td><b>MaxNumberOfOrders</b></td>
+      <td><code>Integer</code></td>
+      <td>The maximum number of orders that the vehicle can visit. Default is <code>INT_MAX</code>.</td>
+    </tr>
+    <tr>
+      <td><b>MinDistance</b></td>
+      <td><code>Float</code></td>
+      <td>The minimum distance that the vehicle must travel (in the same distance unit as set in <code>ConfigurationParameters</code>). Default is <code>0</code>.</td>
+    </tr>
+    <tr>
+      <td><b>MaxDistance</b></td>
+      <td><code>Float</code></td>
+      <td>The maximum distance that the vehicle can travel (in the same distance unit as set in <code>ConfigurationParameters</code>). Default is <code>INT_MAX</code>.</td>
+    </tr>
+    <tr>
+      <td><b>MaxRevenue</b></td>
+      <td><code>Float</code></td>
+      <td>The maximum revenue that the vehicle can collect in total from all customers. Default is <code>INT_MAX</code>.</td>
+    </tr>
+    <tr>
+      <td><b>FuelPrice</b></td>
+      <td><code>Float</code></td>
+      <td>The price for 1 liter of fuel or 1 kWh for an electric engine.</td>
+    </tr>
+  </tbody>
+</table>
+
+## Example Usage  
+
+```json
+{
+    "vehiclesConstraints": [
+    {
+      "fuelPrice": 1.09,
+      "startDate": 1596758400000,
+      "maxNumberOfPackages": 53,
+      "minNumberOfOrders": 0,
+      "maxNumberOfOrders": 300,
+      "minDistance": 0,
+      "maxDistance": 800,
+      "maxRevenue": 85
+    }
+  ]
+}
+```
+
+
+### Explanation
+
+This setup configures a vehicle with the following `vehicleConstraints`:
+
+* **Start time** – The vehicle begins its route at the specified `startDate` (timestamp: 1596758400000, in UTC).
+* **Maximum of 53 packages** – The vehicle can carry up to 53 packages.
+* **Minimum of 0 orders** – The vehicle is not required to visit any minimum number of orders.
+* **Maximum of 300 orders** – The vehicle can visit up to 300 orders.
+* **Minimum distance of 0 units** – There is no minimum travel distance required.
+* **Maximum distance of 800 units** – The vehicle cannot travel more than 800 units.
+* **Maximum revenue of 85** – The total revenue collected from all customers must not exceed 85.
+* **Fuel price of 1.09** – The cost of fuel is set at 1.09 per unit (liter or kWh, depending on engine type).
+
+These constraints ensure that the vehicle operates within its defined limits, allowing the optimization algorithm to generate feasible and efficient routes.

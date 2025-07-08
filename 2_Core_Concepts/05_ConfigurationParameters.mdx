@@ -1,0 +1,196 @@
+---
+sidebar_position: 5
+---
+
+# Configuration Parameters  
+
+import ReadingTime from '../../src/components/reading-time/reading-time';
+
+<ReadingTime/>
+<br/>
+
+## Overview  
+`Configuration Parameters` class in RestAPI define key settings that influence the behavior of the route optimization process. These settings determine aspects such as optimization goals, search time limits, and flexibility in handling orders. Proper configuration ensures that the algorithm meets the operational constraints of the routing problem.  
+
+## Configuration Parameters Structure  
+
+Each Configuration Parameter consists of:  
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Name</b></td>
+      <td><code>String</code></td>
+      <td>The name of the optimization/route configuration.</td>
+    </tr>
+    <tr>
+      <td><b>IgnoreTimeWindow</b></td>
+      <td><code>bool</code></td>
+      <td>Specifies whether time-windows are ignored during optimization. Default is <code>false</code>.</td>
+    </tr>
+    <tr>
+      <td><b>AllowDroppingOrders</b></td>
+      <td><code>bool</code></td>
+      <td>Specifies whether the algorithm is allowed to drop orders if no solution is found by visiting all of them. Default is <code>false</code>.</td>
+    </tr>
+    <tr>
+      <td><b>GroupingOrders</b></td>
+      <td><code>bool</code></td>
+      <td> Specify if the orders will be grouped. If the distance between any two orders is less than 10 meters, those orders will be considered part of the same group. Default is <code>false</code>.</td>
+    </tr>
+    <tr>
+      <td><b>BalancedRoutes</b></td>
+      <td><code>Integer</code></td>
+      <td>
+        Specifies the option to balance routes of an optimization. <br></br>
+        <strong>Possible values:</strong> <br></br>
+        • <code>0</code> - None: No balancing. <br></br>
+        • <code>1</code> - By time: Balance by time. <br></br>
+        • <code>2</code> - By number of orders: Balance by the number of orders.
+      </td>
+    </tr>
+    <tr>
+      <td><b>OptimizationCriterion</b></td>
+      <td><code>Integer</code></td>
+      <td>
+        Specifies the optimization criterion. <br></br>
+        <strong>Possible values:</strong> <br></br>
+        • <code>0</code> - Time: The problem will be optimized by distance. (the route with the shortest distance). <br></br>
+        • <code>1</code> - Distance: The problem will be optimized by time. (the route with the shortest time).
+      </td>
+    </tr>
+    <tr>
+      <td><b>ArrangeCriterion</b></td>
+      <td><code>Integer</code></td>
+      <td>
+        Specifies the arrangement criterion for optimizing time. <br></br>
+        <strong>Used only if OptimizationCriterion = 1 (Distance).</strong><br></br>
+        <strong>Possible values:</strong> <br></br>
+        • <code>0</code> - Matrix: Orders are arranged based on matrix distance. <br></br>
+        • <code>1</code> - Euclidian: Uses the rounded straight-line (Euclidean) distance between orders. <br></br>
+        • <code>2</code> - Exact Euclidian: Uses precise (decimal) straight-line distance between orders. <br></br>
+        • <code>3</code> - Geodesic: Considers Earth's curvature in straight-line distance calculation. <br></br>
+        • <code>4</code> - Manhattan: Uses the Manhattan (grid-based) distance formula.
+  </td>
+    </tr>
+    <tr>
+      <td><b>OptimizationQuality</b></td>
+      <td><code>Integer</code></td>
+      <td>
+        Specifies the optimization quality (solution accuracy). <br></br>
+        <strong>Possible values:</strong> <br></br>
+        • <code>0</code> - Unoptimized: The algorithm will return an unoptimized solution. <br></br>
+        • <code>1</code> - Fast: The algorithm will return the first solution found. (Not an accurate solution) <br></br>
+        • <code>2</code> - Optimized: The algorithm will return an optimized solution. <br></br>
+        • <code>3</code> - Best: The algorithm will return the best solution found in the specified time.
+      </td>
+    </tr>
+    <tr>
+      <td><b>MaxSearchTime</b></td>
+      <td><code>unsigned int</code></td>
+      <td>Maximum time (in seconds) the algorithm can search for a solution. This parameter is considered only when the Optimization Quality is set to OQ_Best. Default is <code>300</code> seconds.</td>
+    </tr>
+    <tr>
+      <td><b>MaxWaitTime</b></td>
+      <td><code>unsigned int</code></td>
+      <td>Maximum time (in seconds) that vehicles can wait at an order to align with the next order's time window. Default is <code>INT_MAX</code>.</td>
+    </tr>
+    <tr>
+      <td><b>RouteType</b></td>
+      <td><code>Integer</code></td>
+      <td>
+        Specifies the route type. <br></br>
+        <strong>Possible values:</strong> <br></br>
+        • <code>0</code> - RoundRoute: The route will return at the first order (circuit). <br></br>
+        • <code>1</code> - EndAnywhere: The route will end at the most efficient order selected by the algorithm. <br></br>
+        • <code>2</code> - CustomEnd: The route will end at the specified order.
+      </td>
+    </tr>
+    <tr>
+      <td><b>Restrictions</b></td>
+      <td><code>Integer</code></td>
+      <td>
+        Specifies road restrictions for distance and time matrix calculations. <br></br>
+        <strong>Possible values:</strong> <br></br>
+        • <code>0</code> - None: No restrictions. <br></br>
+        • <code>1</code> - Tolls: Avoid toll road restriction. <br></br>
+        • <code>2</code> - Highways: Avoid highways restriction.
+      </td>
+    </tr>
+    <tr>
+      <td><b>DistanceUnit</b></td>
+      <td><code>Integer</code></td>
+      <td>
+        Specifies the unit of distance used in optimization and routing calculations. <br></br>
+        <strong>Possible values:</strong> <br></br>
+        • <code>0</code> - Kilometers: Distance in kilometers. <br></br>
+        • <code>1</code> - Miles: Distance in miles.
+      </td>
+    </tr>
+    <tr>
+      <td><b>OrderSequenceOptions</b></td>
+      <td><code>OrdersSequenceMap</code></td>
+      <td>
+        Specifies the association between different orders that should be visited in a certain order. <br></br>
+        <strong>Format:</strong> A map where each pair contains an enum and a list of lists, where each inner list is a sequence of order IDs.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+## Example 
+
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+
+```json
+{
+"configurationParameters": {
+    "name": "Test Optimization",
+    "ignoreTimeWindow": false,
+    "allowDroppingOrders": true,
+    "groupingOrders": false,
+    "balancedRoutes": 0,
+    "optimizationCriterion": 1,
+    "arrangeCriterion": 0,
+    "optimizationQuality": 2,
+    "maxTimeToOptimize": 600,
+    "maxWaitTime": 18000,
+    "routeType": 0,
+    "restrictions": 0,
+    "distanceUnit": 0,
+    "orderSequenceOptions": []
+  }
+}
+```
+</div>
+
+### Explanation
+
+This setup configures an optimization with the following characteristics:
+
+* **"Test Optimization" as the instance name** – Identifies the optimization session.
+* **Time windows are respected** (`ignoreTimeWindow = false`) – Ensures that orders are scheduled within their specified delivery windows.
+* **Orders can be dropped if needed** (`allowDroppingOrders = true`) – Allows the algorithm to exclude unserviceable orders.
+* **No grouping of nearby orders** (`groupingOrders = false`) – Each order is treated individually regardless of proximity.
+* **No route balancing applied** (`balancedRoutes = None (0)`) – The algorithm does not attempt to balance workloads across routes.
+* **Optimization is based on travel distance** (`optimizationCriterion = Distance (1)`) – The algorithm prioritizes routes with shorter total distance.
+* **Arrangement is done using matrix-based distance** (`arrangeCriterion = Matrix (0)`) – Orders are arranged based on distance matrix calculations.
+* **Optimized solution quality is targeted** (`optimizationQuality = Optimized (2)`) – Provides a well-refined solution without exhaustive search.
+* **Maximum optimization time is limited to 600 seconds** (`maxTimeToOptimize = 600`) – Constrains algorithm runtime for performance.
+* **Vehicles can wait up to 5 hours at an order** (`maxWaitTime = 18000`) – Allows schedule alignment with time windows.
+* **Each route is circular** (`routeType = RoundRoute (0)`) – Routes start and end at the same location.
+* **No road restrictions applied** (`restrictions = None (0)`) – All roads, including tolls and highways, are considered.
+* **Distance is measured in kilometers** (`distanceUnit = Kilometers (0)`) – Units used in optimization calculations.
+* **No specific order sequence constraints** (`orderSequenceOptions = []`) – Orders can be visited in any sequence.
+
+---
+
+
+

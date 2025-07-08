@@ -1,0 +1,212 @@
+---
+sidebar_position: 10
+---
+
+import ReadingTime from '../../src/components/reading-time/reading-time';
+
+# Fuel Price
+
+<ReadingTime/>
+<br/>
+
+## Overview
+
+The **Fuel Price RestAPI** allows you to manage fuel price records within the Fleet Management system. You can create, retrieve, update, and delete fuel price data. This RestAPI supports filtering, sorting, and pagination to help manage large datasets efficiently.
+
+:::warning[Currency Note]
+No specific currency is used for the fuel price to keep the method as generic as possible. However, it is recommended that users apply the same currency consistently to ensure route cost calculations reflect reality as closely as possible.
+:::
+### Fuel Price Object Fields
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>creationTimestamp</code></td>
+      <td>Integer</td>
+      <td>Timestamp when the fuel prices were created.</td>
+    </tr>
+    <tr>
+      <td><code>dieselStandard</code></td>
+      <td>Float</td>
+      <td>Price per unit of standard diesel fuel. Default: <code>1.09</code>.</td>
+    </tr>
+    <tr>
+      <td><code>dieselPremium</code></td>
+      <td>Float</td>
+      <td>Price per unit of premium diesel fuel. Default: <code>1.17</code>.</td>
+    </tr>
+    <tr>
+      <td><code>gasolineStandard</code></td>
+      <td>Float</td>
+      <td>Price per unit of standard gasoline. Default: <code>1.07</code>.</td>
+    </tr>
+    <tr>
+      <td><code>gasolinePremium</code></td>
+      <td>Float</td>
+      <td>Price per unit of premium gasoline. Default: <code>1.19</code>.</td>
+    </tr>
+    <tr>
+      <td><code>electric</code></td>
+      <td>Float</td>
+      <td>Price per unit of electric charging (e.g., kWh). Default: <code>0.10</code>.</td>
+    </tr>
+    <tr>
+      <td><code>lpg</code></td>
+      <td>Float</td>
+      <td>Price per unit of LPG fuel. Default: <code>0.55</code>.</td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
+## Endpoints
+
+### 1. Create Fuel Price
+
+**Description:** Adds a new fuel price record to the database.
+
+- **Method:** `POST`
+- **Endpoint:** `/fuel-prices`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+  - `Content-Type: application/json`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/fuel-prices`
+- **Returned error codes:**
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Invalid input or missing required fields.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+
+:::info[Note]
+ If the operation is successful, the `Fuel Price` object will have its `creationTimestamp` field populated. If the operation fails, an error code is returned, which can be interpreted as described in the **Returned error codes** section.
+:::
+
+#### Example:
+
+- **Request Body:**
+
+```json
+{
+  "dieselStandard": 1.5,
+  "dieselPremium": 2,
+  "gasolineStandard": 1.51,
+  "gasolinePremium": 1.48,
+  "electric": 0.18,
+  "lpg": 0.6
+}
+```
+- **Response Body:** (error code `200`)
+- 
+```json
+{
+
+  "creationTimestamp": 1602684618476,
+  "dieselStandard": 1.5,
+  "dieselPremium": 2,
+  "gasolineStandard": 1.51,
+  "gasolinePremium": 1.48,
+  "electric": 0.18,
+  "lpg": 0.6
+}
+
+```
+---
+
+### 2. Get All Fuel Prices
+
+**Description:** Get fuel prices. If no entry was previously added, the default values will be returned
+
+- **Method:** `GET`
+- **Endpoint:** `/fuel-prices`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/fuel-prices`
+
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Invalid input or missing required fields.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>404 Not Found</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>The fuel prices were not found.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Example:
+
+- **Response Body:** (error code `200`)
+
+```json
+{
+
+  "creationTimestamp": 1602684618476,
+  "dieselStandard": 1.5,
+  "dieselPremium": 2,
+  "gasolineStandard": 1.51,
+  "gasolinePremium": 1.48,
+  "electric": 0.18,
+  "lpg": 0.6
+}
+
+```

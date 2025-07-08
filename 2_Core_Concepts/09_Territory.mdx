@@ -1,0 +1,523 @@
+---
+sidebar_position: 9
+---
+
+import { AddTerritories } from './_data/territory';
+import { GetTerritory } from './_data/territory';
+import { GetTerritories } from './_data/territory';
+import { GenerateTerritories } from './_data/territory';
+import { GeneratedTerritories } from './_data/territory';
+import { GetOrders } from './_data/order';
+import CodeBlock from '@theme/CodeBlock';
+import ReadingTime from '../../src/components/reading-time/reading-time';
+
+# Territory
+
+<ReadingTime/>
+<br/>
+
+## Overview
+
+The **Territory RestAPI** allows you to manage territories within the Fleet Management system. You can create, retrieve, update, and delete territories. This RestAPI supports basic operations to define geographical regions used for route planning and optimization.
+
+### Territory Object Fields
+
+import React from 'react';
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>id</code></td>
+      <td>Integer</td>
+      <td>Unique identifier for the territory.</td>
+    </tr>
+    <tr>
+      <td><code>name</code></td>
+      <td>String</td>
+      <td>Name of the territory.</td>
+    </tr>
+    <tr>
+      <td><code>type</code></td>
+      <td>Integer</td>
+      <td>
+        <div>Territory type:</div>
+        <div><code>0</code> - Polygon</div>
+        <div><code>1</code> - Circle</div>
+        <div><code>2</code> - Rectangle</div>
+      </td>
+    </tr>
+    <tr>
+      <td><code>data</code></td>
+      <td>Array</td>
+      <td>
+        <div>Defines the shape of the territory based on its type:</div>
+        <div><strong>Circle</strong> - Contains the center and a point on the circle.</div>
+        <div><strong>Rectangle</strong> - Contains two diagonally opposite points.</div>
+        <div><strong>Polygon</strong> - Contains a list of points defining the area.</div>
+      </td>
+    </tr>
+    <tr>
+      <td><code>color</code></td>
+      <td>String</td>
+      <td>Color associated with the territory.</td>
+    </tr>
+    <tr>
+      <td><code>orders</code></td>
+      <td>Array</td>
+      <td>List of orders associated with the territory.</td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
+## Endpoints
+
+### 1. Create Territory
+
+**Description:** Adds a new territory to the database.
+
+- **Method:** `POST`
+- **Endpoint:** `/territories`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+  - `Content-Type: application/json`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/territories`
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>
+        <ul style={{ margin: 0, paddingLeft: "20px" }}>
+          <li>Not all the points of the territory's data have 2 values (latitude, longitude).</li>
+          <li>For polygon, the data should have 3 points; for circle and rectangle the territory’s data should have 2 points: the center of the circle and a point on the circle edge or 2 points diagonally opposite.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Example:
+
+- **Request Body:**
+
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+<CodeBlock language="json">
+{JSON.stringify(AddTerritories, null, 2)}
+</CodeBlock>
+</div>
+
+- **Response Body:** (error code `200`)
+
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+<CodeBlock language="json">
+{JSON.stringify(GetTerritories, null, 2)}
+</CodeBlock>
+</div>
+
+---
+
+### 2. Get All Territories
+
+**Description:** Fetches a list of all territories.
+
+- **Method:** `GET`
+- **Endpoint:** `/territories`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/territories`
+- **Query Parameters:**
+  - `search` (string, *optional*) – General search term across territories.  
+  - `id` (string, *optional*) – Filter by territory ID (`id=value:exact` for exact match).  
+  - `name` (string, *optional*) – Filter by territory name (`name=value:exact` for exact match).  
+  - `type` (string, *optional*) – Filter by territory type (`type=value`).  
+  - `data` (string, *optional*) – Filter by data (`data=value:exact` for exact match).  
+  - `color` (string, *optional*) – Filter by color (`color=value:exact` for exact match).  
+  - `sort` (string, *optional*) – Sorting format: `column1:asc/desc,column2:asc/desc`
+                                    - Available columns: `id, name, type, data, color`
+  - `includeColumns` (string, *optional*) – Specify which columns to include. 
+                                              - Available columns: `id, name, type, data, color`
+  - `page` (integer, *optional*) – Page number for pagination.
+  - `per_page` (integer, *optional*) – Number of items per page.
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>The values sent for page and per_page parameters are incorrect; should be greater than 0.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+  
+#### Example:
+
+- **Response Body:** (error code `200`)
+
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+<CodeBlock language="json">
+{JSON.stringify(GetTerritories, null, 2)}
+</CodeBlock>
+</div>
+---
+
+### 3. Get a Territory by ID
+
+**Description:** Retrieves a specific territory by ID.
+
+- **Method:** `GET`
+- **Endpoint:** `/territories/{id}`
+- **Headers:**
+  - `Authorization: Bearer YOUR_API_KEY`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/territories/{id}`  
+- **Path Parameter:**
+  - `id` (integer, **required*) - The unique territory ID.
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Invalid input or missing required fields.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>404 Not Found</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Territory not found in database.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+  
+#### Example:
+
+- **Response Body:** (error code `200`)
+
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+<CodeBlock language="json">
+{JSON.stringify(GetTerritory, null, 2)}
+</CodeBlock>
+</div>
+---
+
+### 4. Update a Territory
+
+**Description:** Updates an existing territory record.
+
+- **Method:** `PUT`
+- **Endpoint:** `/territories/{id}`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+  - `Content-Type: application/json`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/territories/{id}`  
+- **Path Parameter:**
+  - `id` (integer, **required*) - Territory ID.
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>
+        <ul style={{ margin: 0, paddingLeft: "20px" }}>
+          <li>Not all the points of the territory's data have 2 values (latitude, longitude).</li>
+          <li>For polygon, the data should have 3 points; for circle and rectangle the territory’s data should have 2 points: the center of the circle and a point on the circle edge or 2 points diagonally opposite.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>404 Not Found</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Territory not found in database.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+  
+#### Example:
+
+- **Request Body:**
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+<CodeBlock language="json">
+{JSON.stringify(GetTerritory, null, 2)}
+</CodeBlock>
+</div>
+
+- **Response Body:** (error code `200`)
+  
+```json
+{
+  "message": "Operation done successfully",
+}
+```
+---
+
+### 5. Delete Territories
+
+**Description:** Deletes territories from the system.
+
+- **Method:** `DELETE`
+- **Endpoint:** `/territories`
+- **Headers:**
+    - `Authorization: YOUR_API_KEY`
+    - `Content-Type: application/json`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/territories`
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>404 Not Found</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Can't delete territories because at least one of them does not exist</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+  
+#### Example:
+
+- **Request Body:**
+```json
+{
+  "ids": [1234, 5678]
+}
+```
+- **Response Body:** (error code `200`)
+
+```json
+{
+  "message": "Operation done successfully",
+}
+```
+---
+
+### 6. Generate a Territory
+
+**Description:** Automatically generates a territory based on provided parameters.The list of coordinates should contain at least 3 coordinates to create 1 territory. TerritoriesNumber, how many territories should be created (if is is 0, then the algorithm will determinate how many should be created).
+
+- **Method:** `POST`
+- **Endpoint:** `/territories/generate`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+  - `Content-Type: application/json`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/territories/generate`
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>
+        <ul style={{ margin: 0, paddingLeft: "20px" }}>
+          <li>The number of locations is less than 3 and a territory needs at least 3 locations.</li>
+          <li>The number of locations should be at least three times the number of territories.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>404 Not Found</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Couldn't create that many territories. Try adding more coordinates or lower the number of territories.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+  
+#### Example:
+
+- **Request Body:**
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+<CodeBlock language="json">
+{JSON.stringify(GenerateTerritories, null, 2)}
+</CodeBlock>
+</div>
+
+- **Response Body:** (error code `200`)
+
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+<CodeBlock language="json">
+{JSON.stringify(GeneratedTerritories, null, 2)}
+</CodeBlock>
+</div>
+---
+
+### 7. Get Orders from Territory
+
+**Description:** Retrieves all orders assigned to a specific territory.
+
+- **Method:** `GET`
+- **Endpoint:** `/territories/{id}/orders`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/territories/{id}/orders`
+- **Path Parameter:**
+  - `id` (integer, **required*) - The unique territory ID.
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>404 Not Found</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Territory not found in database.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+  
+- **Response Body:** (error code `200`)
+
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+<CodeBlock language="json">
+{JSON.stringify(GetOrders, null, 2)}
+</CodeBlock>
+</div>
+
+---

@@ -1,0 +1,1634 @@
+---
+sidebar_position: 1
+---
+
+import { AddCustomers } from './_data/customer';
+import { GetCustomers } from './_data/customer';
+import { GetCustomer } from './_data/customer';
+import { OrderHistory } from './_data/customer';
+import CodeBlock from '@theme/CodeBlock';
+import ReadingTime from '../../src/components/reading-time/reading-time';
+
+# Customer
+
+<ReadingTime/>
+<br/>
+
+## Overview
+
+The **Customer RestAPI** allows you to manage customer records within the Fleet Management system. You can create, retrieve, update, and delete customer data. This RestAPI supports filtering, sorting, and pagination to help manage large datasets efficiently.
+
+### Customer Object Fields
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>id</code></td>
+      <td>Integer</td>
+      <td>Unique identifier for the customer.</td>
+    </tr>
+    <tr>
+      <td><code>location</code></td>
+      <td>Object</td>
+      <td>Coordinates of the customer’s location.</td>
+    </tr>
+    <tr>
+      <td><code>alias</code></td>
+      <td>String</td>
+      <td>Short name or identifier for the customer.</td>
+    </tr>
+    <tr>
+      <td><code>firstName</code></td>
+      <td>String</td>
+      <td>Customer's first name.</td>
+    </tr>
+    <tr>
+      <td><code>lastName</code></td>
+      <td>String</td>
+      <td>Customer's last name.</td>
+    </tr>
+    <tr>
+      <td><code>address</code></td>
+      <td>Object</td>
+      <td>Detailed address information of the customer.</td>
+    </tr>
+    <tr>
+      <td><code>email</code></td>
+      <td>String</td>
+      <td>Email address of the customer.</td>
+    </tr>
+    <tr>
+      <td><code>phoneNumber</code></td>
+      <td>String</td>
+      <td>Customer's contact phone number.</td>
+    </tr>
+    <tr>
+      <td><code>customData</code></td>
+      <td>String</td>
+      <td>
+        <div>Additional customer-specific data.</div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
+## Endpoints
+
+### 1. Create Customer
+
+**Description:** Adds a new customer to the database. The `id` field will be populated, it will return a list of customers with the id field populated
+
+- **Method:** `POST`
+- **Endpoint:** `/customers`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+  - `Content-Type: application/json`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/customers`  
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>
+        <ul style={{ margin: 0, paddingLeft: "20px" }}>
+          <li>The customer does not have the coordinates set.</li>
+          <li>The email set for the customer has wrong format.</li>
+          <li>The phone number set for the customer has wrong format.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+
+:::info[Note]
+ If the operation is successful, the `Customer` object will have its `id` field populated. If the operation fails, an error code is returned, which can be interpreted as described in the **Returned error codes** section.
+:::
+
+#### Example:
+
+- **Request Body:**
+
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+<CodeBlock language="json">
+{JSON.stringify(AddCustomers, null, 2)}
+</CodeBlock>
+</div>
+
+- **Response Body:** (error code `200`)
+	
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+<CodeBlock language="json">
+{JSON.stringify(GetCustomers, null, 2)}
+</CodeBlock>
+</div>
+
+---
+
+### 2. Get All Customers
+
+**Description:** Fetches a list of all customers with optional filtering.
+
+- **Method:** `GET`
+- **Endpoint:** `/customers`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/customers`
+- **Query Parameters:**
+  - `search` (string, *optional*) – General search term across customers.  
+  - `id` (string, *optional*) – Filter by customer ID (`id=value:exact` for exact match).  
+  - `alias` (string, *optional*) – Filter by customer alias (`alias=value:exact` for exact match).  
+  - `firstName` (string, *optional*) – Filter by first name (`firstName=value:exact` for exact match).  
+  - `lastName` (string, *optional*) – Filter by last name (`lastName=value:exact` for exact match).  
+  - `location` (string, *optional*) – Filter by location (`location=value:exact` for exact match).  
+  - `country` (string, *optional*) – Filter by country (`country=value:exact` for exact match).  
+  - `state` (string, *optional*) – Filter by state (`state=value:exact` for exact match).  
+  - `county` (string, *optional*) – Filter by county (`county=value:exact` for exact match).  
+  - `city` (string, *optional*) – Filter by city (`city=value:exact` for exact match).  
+  - `postalCode` (string, *optional*) – Filter by postal code (`postalCode=value:exact` for exact match).  
+  - `streetName` (string, *optional*) – Filter by street name (`streetName=value:exact` for exact match).  
+  - `streetNumber` (string, *optional*) – Filter by street number (`streetNumber=value:exact` for exact match).  
+  - `extra` (string, *optional*) – Filter by extra address value (`extra=value:exact` for exact match).  
+  - `email` (string, *optional*) – Filter by email (`email=value:exact` for exact match).  
+  - `phoneNumber` (string, *optional*) – Filter by phone number (`phoneNumber=value:exact` for exact match).  
+  - `customData` (string, *optional*) – Filter by custom data (`customData=value:exact` for exact match).  
+  - `sort` (string, *optional*) – Sorting format: `column1:asc/desc,column2:asc/desc`
+                                    - Available columns: `id, alias, firstName, lastName, latitude, longitude, country, state, county, city, postalCode, streetName, streetNumber, extra, email, phoneNumber, customData`.
+  - `includeColumns` (string, *optional*) – Specify which columns to include. 
+                                            - Available columns: `id, alias, idAddress, firstName, lastName, latitude, longitude, country, state, county, city, postalCode, streetName, streetNumber, extra, email, phoneNumber, customData`
+  - `page` (integer, *optional*) – Page number for pagination.
+  - `per_page` (integer, *optional*) – Number of items per page.
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>The values sent for page and per_page parameters are incorrect; should be greater than 0.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Example:
+
+- **Response Body:** (error code `200`)
+
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+<CodeBlock language="json">
+{JSON.stringify(GetCustomers, null, 2)}
+</CodeBlock>
+</div>
+
+---
+
+### 3. Get a Customer by ID
+
+**Description:** Retrieves a specific customer by ID.
+
+- **Method:** `GET`
+- **Endpoint:** `/customers/{id}`
+- **Headers:**
+    - `Authorization: YOUR_API_KEY`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/customers/{id}`  
+- **Path Parameter:**
+  - `id` (integer, **required*) - The unique customer ID. 
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Invalid input or missing required fields.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>404 Not Found</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Customer not found in database.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Example:
+
+- **Response Body:** (error code `200`)
+  
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+<CodeBlock language="json">
+{JSON.stringify(GetCustomer, null, 2)}
+</CodeBlock>
+</div>
+
+---
+
+### 4. Update a Customer
+
+**Description:** Updates an existing customer record.
+
+- **Method:** `PUT`
+- **Endpoint:** `/customers/{id}`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+  - `Content-Type: application/json`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/customers/{id}`  
+- **Path Parameter:**
+  - id (integer, **required*) - Customer ID. 
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>
+        <ul style={{ margin: 0, paddingLeft: "20px" }}>
+          <li>The customer does not have the coordinates set.</li>
+          <li>The email set for the customer has wrong format.</li>
+          <li>The phone number set for the customer has wrong format.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>404 Not Found</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Customer not found in database.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Example:
+
+- **Request Body:**
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+<CodeBlock language="json">
+{JSON.stringify(GetCustomer, null, 2)}
+</CodeBlock>
+</div>
+
+- **Response Body:** (error code `200`)
+```json
+{
+  "message": "Operation done successfully",
+}
+```
+---
+
+### 5. Delete Customers
+
+**Description:** Deletes customers from the system.
+
+- **Method:** `DELETE`
+- **Endpoint:** `/customers`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+  - `Content-Type: application/json`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/customers`
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Invalid input or missing required fields.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>404 Not Found</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Can't delete customers because at least one of them does not exist.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Example:
+- **Request Body:**
+ -List of customer IDs to delete.
+```json
+  [12345, 23456, 34567]
+```
+- **Response Body:** (error code `200`)
+```json
+{
+  "message": "Operation done successfully",
+}
+```
+---
+
+### 6. Get Customer History
+
+**Description:** Retrieves the order history and associated optimizations for a specific customer.
+
+- **Method:** `GET`
+- **Endpoint:** `/customers/{id}/history`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+  - `Content-Type: application/json`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/customers/{id}/history`
+**Path Parameter:**
+- `id` (integer, **required*) - The unique customer ID. 
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>The customer was not found or its history couldn’t be retrieved.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>404 Not Found</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Customer not found in database.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+  
+#### Example:
+
+- **Response Body:** (error code `200`)
+
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+
+```json
+{
+  "history": [
+    {
+      "order": {
+        "revenue": 0,
+        "serviceTime": 0,
+        "timeWindow": [
+          420,
+          1086
+        ],
+        "creationTimestamp": 1744096603223,
+        "cube": 0,
+        "numberOfPackages": 0,
+        "depotId": 0,
+        "customData": "",
+        "weight": 0,
+        "phoneNumber": "+12025550181",
+        "lastName": "",
+        "status": 0,
+        "firstName": "",
+        "alias": "",
+        "state": 1,
+        "type": 0,
+        "priority": 0,
+        "id": 933799,
+        "location": [
+          48.827327,
+          2.342267
+        ],
+        "address": {
+          "streetNumber": "",
+          "postalCode": "",
+          "streetName": "",
+          "county": "",
+          "state": "",
+          "extra": "",
+          "city": "",
+          "country": ""
+        },
+        "customerInfo": {
+          "phoneNumber": "+12025550181",
+          "email": "c1@yahoo.com",
+          "lastName": "",
+          "firstName": "",
+          "alias": "",
+          "customData": "",
+          "id": 1839506,
+          "location": [
+            48.827327,
+            2.342267
+          ],
+          "address": {
+            "streetNumber": "",
+            "postalCode": "",
+            "streetName": "",
+            "county": "",
+            "state": "",
+            "extra": "",
+            "city": "",
+            "country": ""
+          }
+        }
+      },
+      "optimizationsAndRoutes": [
+        {
+          "optimization": {
+            "configurationParameters": {
+              "orderSequenceOptions": [],
+              "distanceUnit": 0,
+              "maxTimeToOptimize": 300,
+              "optimizationQuality": 2,
+              "routeType": 0,
+              "arrangeCriterion": 0,
+              "restrictions": 0,
+              "maxWaitTime": 18000,
+              "balancedRoutes": 0,
+              "groupingOrders": false,
+              "optimizationCriterion": 0,
+              "allowDroppingOrders": false,
+              "ignoreTimeWindow": false,
+              "name": "Paris - test optimization"
+            },
+            "id": 139950,
+            "creationTimestamp": 1744096603789,
+            "orders": [
+              {
+                "revenue": 0,
+                "serviceTime": 600,
+                "timeWindow": [
+                  420,
+                  1086
+                ],
+                "creationTimestamp": 1744096603173,
+                "cube": 0,
+                "numberOfPackages": 0,
+                "depotId": 0,
+                "customData": "",
+                "weight": 0,
+                "phoneNumber": "+12025550181",
+                "lastName": "",
+                "status": 1,
+                "firstName": "",
+                "alias": "",
+                "state": 1,
+                "type": 0,
+                "priority": 0,
+                "id": 933798,
+                "location": [
+                  48.870852,
+                  2.356148
+                ],
+                "address": {
+                  "streetNumber": "",
+                  "postalCode": "",
+                  "streetName": "",
+                  "county": "",
+                  "state": "",
+                  "extra": "",
+                  "city": "",
+                  "country": ""
+                },
+                "customerInfo": {
+                  "phoneNumber": "+12025550181",
+                  "email": "c0@yahoo.com",
+                  "lastName": "",
+                  "firstName": "",
+                  "alias": "",
+                  "customData": "",
+                  "id": 1839505,
+                  "location": [
+                    48.870852,
+                    2.356148
+                  ],
+                  "address": {
+                    "streetNumber": "",
+                    "postalCode": "",
+                    "streetName": "",
+                    "county": "",
+                    "state": "",
+                    "extra": "",
+                    "city": "",
+                    "country": ""
+                  }
+                }
+              },
+              {
+                "revenue": 0,
+                "serviceTime": 0,
+                "timeWindow": [
+                  420,
+                  1086
+                ],
+                "creationTimestamp": 1744096603223,
+                "cube": 0,
+                "numberOfPackages": 0,
+                "depotId": 0,
+                "customData": "",
+                "weight": 0,
+                "phoneNumber": "+12025550181",
+                "lastName": "",
+                "status": 1,
+                "firstName": "",
+                "alias": "",
+                "state": 1,
+                "type": 0,
+                "priority": 0,
+                "id": 933799,
+                "location": [
+                  48.827327,
+                  2.342267
+                ],
+                "address": {
+                  "streetNumber": "",
+                  "postalCode": "",
+                  "streetName": "",
+                  "county": "",
+                  "state": "",
+                  "extra": "",
+                  "city": "",
+                  "country": ""
+                },
+                "customerInfo": {
+                  "phoneNumber": "+12025550181",
+                  "email": "c1@yahoo.com",
+                  "lastName": "",
+                  "firstName": "",
+                  "alias": "",
+                  "customData": "",
+                  "id": 1839506,
+                  "location": [
+                    48.827327,
+                    2.342267
+                  ],
+                  "address": {
+                    "streetNumber": "",
+                    "postalCode": "",
+                    "streetName": "",
+                    "county": "",
+                    "state": "",
+                    "extra": "",
+                    "city": "",
+                    "country": ""
+                  }
+                }
+              },
+              {
+                "revenue": 12,
+                "serviceTime": 600,
+                "timeWindow": [
+                  770,
+                  1020
+                ],
+                "creationTimestamp": 1744096603274,
+                "cube": 2.5,
+                "numberOfPackages": 3,
+                "depotId": 0,
+                "customData": "",
+                "weight": 5.099999904632568,
+                "phoneNumber": "+12025550181",
+                "lastName": "",
+                "status": 1,
+                "firstName": "",
+                "alias": "",
+                "state": 1,
+                "type": 0,
+                "priority": 0,
+                "id": 933800,
+                "location": [
+                  48.88025,
+                  2.299601
+                ],
+                "address": {
+                  "streetNumber": "",
+                  "postalCode": "",
+                  "streetName": "",
+                  "county": "",
+                  "state": "",
+                  "extra": "",
+                  "city": "",
+                  "country": ""
+                },
+                "customerInfo": {
+                  "phoneNumber": "+12025550181",
+                  "email": "c2@yahoo.com",
+                  "lastName": "",
+                  "firstName": "",
+                  "alias": "",
+                  "customData": "",
+                  "id": 1839507,
+                  "location": [
+                    48.88025,
+                    2.299601
+                  ],
+                  "address": {
+                    "streetNumber": "",
+                    "postalCode": "",
+                    "streetName": "",
+                    "county": "",
+                    "state": "",
+                    "extra": "",
+                    "city": "",
+                    "country": ""
+                  }
+                }
+              },
+              {
+                "revenue": 2.700000047683716,
+                "serviceTime": 200,
+                "timeWindow": [
+                  752,
+                  1036
+                ],
+                "creationTimestamp": 1744096603322,
+                "cube": 5.800000190734863,
+                "numberOfPackages": 8,
+                "depotId": 0,
+                "customData": "",
+                "weight": 15.399999618530273,
+                "phoneNumber": "+12025550181",
+                "lastName": "",
+                "status": 1,
+                "firstName": "",
+                "alias": "",
+                "state": 1,
+                "type": 1,
+                "priority": 0,
+                "id": 933801,
+                "location": [
+                  48.845198,
+                  2.402896
+                ],
+                "address": {
+                  "streetNumber": "",
+                  "postalCode": "",
+                  "streetName": "",
+                  "county": "",
+                  "state": "",
+                  "extra": "",
+                  "city": "",
+                  "country": ""
+                },
+                "customerInfo": {
+                  "phoneNumber": "+12025550181",
+                  "email": "c3@yahoo.com",
+                  "lastName": "",
+                  "firstName": "",
+                  "alias": "",
+                  "customData": "",
+                  "id": 1839508,
+                  "location": [
+                    48.845198,
+                    2.402896
+                  ],
+                  "address": {
+                    "streetNumber": "",
+                    "postalCode": "",
+                    "streetName": "",
+                    "county": "",
+                    "state": "",
+                    "extra": "",
+                    "city": "",
+                    "country": ""
+                  }
+                }
+              },
+              {
+                "revenue": 7.5,
+                "serviceTime": 600,
+                "timeWindow": [
+                  736,
+                  1086
+                ],
+                "creationTimestamp": 1744096603391,
+                "cube": 8.399999618530273,
+                "numberOfPackages": 9,
+                "depotId": 0,
+                "customData": "",
+                "weight": 16.200000762939453,
+                "phoneNumber": "+12025550181",
+                "lastName": "",
+                "status": 1,
+                "firstName": "",
+                "alias": "",
+                "state": 1,
+                "type": 0,
+                "priority": 0,
+                "id": 933802,
+                "location": [
+                  48.897163,
+                  2.292865
+                ],
+                "address": {
+                  "streetNumber": "",
+                  "postalCode": "",
+                  "streetName": "",
+                  "county": "",
+                  "state": "",
+                  "extra": "",
+                  "city": "",
+                  "country": ""
+                },
+                "customerInfo": {
+                  "phoneNumber": "+12025550181",
+                  "email": "c4@yahoo.com",
+                  "lastName": "",
+                  "firstName": "",
+                  "alias": "",
+                  "customData": "",
+                  "id": 1839509,
+                  "location": [
+                    48.897163,
+                    2.292865
+                  ],
+                  "address": {
+                    "streetNumber": "",
+                    "postalCode": "",
+                    "streetName": "",
+                    "county": "",
+                    "state": "",
+                    "extra": "",
+                    "city": "",
+                    "country": ""
+                  }
+                }
+              },
+              {
+                "revenue": 10,
+                "serviceTime": 900,
+                "timeWindow": [
+                  786,
+                  1053
+                ],
+                "creationTimestamp": 1744096603435,
+                "cube": 9.699999809265137,
+                "numberOfPackages": 9,
+                "depotId": 0,
+                "customData": "",
+                "weight": 16.5,
+                "phoneNumber": "+12025550181",
+                "lastName": "",
+                "status": 1,
+                "firstName": "",
+                "alias": "",
+                "state": 1,
+                "type": 1,
+                "priority": 0,
+                "id": 933803,
+                "location": [
+                  48.90092,
+                  2.400039
+                ],
+                "address": {
+                  "streetNumber": "",
+                  "postalCode": "",
+                  "streetName": "",
+                  "county": "",
+                  "state": "",
+                  "extra": "",
+                  "city": "",
+                  "country": ""
+                },
+                "customerInfo": {
+                  "phoneNumber": "+12025550181",
+                  "email": "c5@yahoo.com",
+                  "lastName": "",
+                  "firstName": "",
+                  "alias": "",
+                  "customData": "",
+                  "id": 1839510,
+                  "location": [
+                    48.90092,
+                    2.400039
+                  ],
+                  "address": {
+                    "streetNumber": "",
+                    "postalCode": "",
+                    "streetName": "",
+                    "county": "",
+                    "state": "",
+                    "extra": "",
+                    "city": "",
+                    "country": ""
+                  }
+                }
+              },
+              {
+                "revenue": 13.399999618530273,
+                "serviceTime": 500,
+                "timeWindow": [
+                  820,
+                  1020
+                ],
+                "creationTimestamp": 1744096603475,
+                "cube": 2.5999999046325684,
+                "numberOfPackages": 5,
+                "depotId": 0,
+                "customData": "",
+                "weight": 7.5,
+                "phoneNumber": "+12025550181",
+                "lastName": "",
+                "status": 1,
+                "firstName": "",
+                "alias": "",
+                "state": 1,
+                "type": 0,
+                "priority": 0,
+                "id": 933804,
+                "location": [
+                  48.860914,
+                  2.310625
+                ],
+                "address": {
+                  "streetNumber": "",
+                  "postalCode": "",
+                  "streetName": "",
+                  "county": "",
+                  "state": "",
+                  "extra": "",
+                  "city": "",
+                  "country": ""
+                },
+                "customerInfo": {
+                  "phoneNumber": "+12025550181",
+                  "email": "c6@yahoo.com",
+                  "lastName": "",
+                  "firstName": "",
+                  "alias": "",
+                  "customData": "",
+                  "id": 1839511,
+                  "location": [
+                    48.860914,
+                    2.310625
+                  ],
+                  "address": {
+                    "streetNumber": "",
+                    "postalCode": "",
+                    "streetName": "",
+                    "county": "",
+                    "state": "",
+                    "extra": "",
+                    "city": "",
+                    "country": ""
+                  }
+                }
+              },
+              {
+                "revenue": 14.699999809265137,
+                "serviceTime": 750,
+                "timeWindow": [
+                  753,
+                  1086
+                ],
+                "creationTimestamp": 1744096603514,
+                "cube": 4.599999904632568,
+                "numberOfPackages": 11,
+                "depotId": 0,
+                "customData": "",
+                "weight": 12.100000381469727,
+                "phoneNumber": "+12025550181",
+                "lastName": "",
+                "status": 1,
+                "firstName": "",
+                "alias": "",
+                "state": 1,
+                "type": 1,
+                "priority": 0,
+                "id": 933805,
+                "location": [
+                  48.827865,
+                  2.379216
+                ],
+                "address": {
+                  "streetNumber": "",
+                  "postalCode": "",
+                  "streetName": "",
+                  "county": "",
+                  "state": "",
+                  "extra": "",
+                  "city": "",
+                  "country": ""
+                },
+                "customerInfo": {
+                  "phoneNumber": "+12025550181",
+                  "email": "c7@yahoo.com",
+                  "lastName": "",
+                  "firstName": "",
+                  "alias": "",
+                  "customData": "",
+                  "id": 1839512,
+                  "location": [
+                    48.827865,
+                    2.379216
+                  ],
+                  "address": {
+                    "streetNumber": "",
+                    "postalCode": "",
+                    "streetName": "",
+                    "county": "",
+                    "state": "",
+                    "extra": "",
+                    "city": "",
+                    "country": ""
+                  }
+                }
+              },
+              {
+                "revenue": 2.9000000953674316,
+                "serviceTime": 800,
+                "timeWindow": [
+                  770,
+                  1070 
+                ],
+                "creationTimestamp": 1744096603555,
+                "cube": 1.5,
+                "numberOfPackages": 6,
+                "depotId": 0,
+                "customData": "",
+                "weight": 5.199999809265137,
+                "phoneNumber": "+12025550181",
+                "lastName": "",
+                "status": 1,
+                "firstName": "",
+                "alias": "",
+                "state": 1,
+                "type": 1,
+                "priority": 0,
+                "id": 933806,
+                "location": [
+                  48.887096,
+                  2.283513
+                ],
+                "address": {
+                  "streetNumber": "",
+                  "postalCode": "",
+                  "streetName": "",
+                  "county": "",
+                  "state": "",
+                  "extra": "",
+                  "city": "",
+                  "country": ""
+                },
+                "customerInfo": {
+                  "phoneNumber": "+12025550181",
+                  "email": "c8@yahoo.com",
+                  "lastName": "",
+                  "firstName": "",
+                  "alias": "",
+                  "customData": "",
+                  "id": 1839513,
+                  "location": [
+                    48.887096,
+                    2.283513
+                  ],
+                  "address": {
+                    "streetNumber": "",
+                    "postalCode": "",
+                    "streetName": "",
+                    "county": "",
+                    "state": "",
+                    "extra": "",
+                    "city": "",
+                    "country": ""
+                  }
+                }
+              },
+              {
+                "revenue": 8.100000381469727,
+                "serviceTime": 1000,
+                "timeWindow": [
+                  836,
+                  1053
+                ],
+                "creationTimestamp": 1744096603595,
+                "cube": 7.5,
+                "numberOfPackages": 13,
+                "depotId": 0,
+                "customData": "",
+                "weight": 6.300000190734863,
+                "phoneNumber": "+12025550181",
+                "lastName": "",
+                "status": 1,
+                "firstName": "",
+                "alias": "",
+                "state": 1,
+                "type": 0,
+                "priority": 0,
+                "id": 933807,
+                "location": [
+                  48.896894,
+                  2.321586
+                ],
+                "address": {
+                  "streetNumber": "",
+                  "postalCode": "",
+                  "streetName": "",
+                  "county": "",
+                  "state": "",
+                  "extra": "",
+                  "city": "",
+                  "country": ""
+                },
+                "customerInfo": {
+                  "phoneNumber": "+12025550181",
+                  "email": "c9@yahoo.com",
+                  "lastName": "",
+                  "firstName": "",
+                  "alias": "",
+                  "customData": "",
+                  "id": 1839514,
+                  "location": [
+                    48.896894,
+                    2.321586
+                  ],
+                  "address": {
+                    "streetNumber": "",
+                    "postalCode": "",
+                    "streetName": "",
+                    "county": "",
+                    "state": "",
+                    "extra": "",
+                    "city": "",
+                    "country": ""
+                  }
+                }
+              },
+              {
+                "revenue": 6.199999809265137,
+                "serviceTime": 850,
+                "timeWindow": [
+                  903,
+                  1020
+                ],
+                "creationTimestamp": 1744096603640,
+                "cube": 4.099999904632568,
+                "numberOfPackages": 10,
+                "depotId": 0,
+                "customData": "",
+                "weight": 8,
+                "phoneNumber": "+12025550181",
+                "lastName": "",
+                "status": 1,
+                "firstName": "",
+                "alias": "",
+                "state": 1,
+                "type": 0,
+                "priority": 0,
+                "id": 933808,
+                "location": [
+                  48.870449,
+                  2.342204
+                ],
+                "address": {
+                  "streetNumber": "",
+                  "postalCode": "",
+                  "streetName": "",
+                  "county": "",
+                  "state": "",
+                  "extra": "",
+                  "city": "",
+                  "country": ""
+                },
+                "customerInfo": {
+                  "phoneNumber": "+12025550181",
+                  "email": "c10@yahoo.com",
+                  "lastName": "",
+                  "firstName": "",
+                  "alias": "",
+                  "customData": "",
+                  "id": 1839515,
+                  "location": [
+                    48.870449,
+                    2.342204
+                  ],
+                  "address": {
+                    "streetNumber": "",
+                    "postalCode": "",
+                    "streetName": "",
+                    "county": "",
+                    "state": "",
+                    "extra": "",
+                    "city": "",
+                    "country": ""
+                  }
+                }
+              },
+              {
+                "revenue": 2.299999952316284,
+                "serviceTime": 600,
+                "timeWindow": [
+                  870,
+                  1020
+                ],
+                "creationTimestamp": 1744096603690,
+                "cube": 11.5,
+                "numberOfPackages": 6,
+                "depotId": 0,
+                "customData": "",
+                "weight": 4.800000190734863,
+                "phoneNumber": "+12025550181",
+                "lastName": "",
+                "status": 1,
+                "firstName": "",
+                "alias": "",
+                "state": 1,
+                "type": 0,
+                "priority": 0,
+                "id": 933809,
+                "location": [
+                  48.895658,
+                  2.344043
+                ],
+                "address": {
+                  "streetNumber": "",
+                  "postalCode": "",
+                  "streetName": "",
+                  "county": "",
+                  "state": "",
+                  "extra": "",
+                  "city": "",
+                  "country": ""
+                },
+                "customerInfo": {
+                  "phoneNumber": "+12025550181",
+                  "email": "c11@yahoo.com",
+                  "lastName": "",
+                  "firstName": "",
+                  "alias": "",
+                  "customData": "",
+                  "id": 1839516,
+                  "location": [
+                    48.895658,
+                    2.344043
+                  ],
+                  "address": {
+                    "streetNumber": "",
+                    "postalCode": "",
+                    "streetName": "",
+                    "county": "",
+                    "state": "",
+                    "extra": "",
+                    "city": "",
+                    "country": ""
+                  }
+                }
+              }
+            ],
+            "vehicles": [
+              {
+                "length": 0,
+                "weight": 0,
+                "width": 0,
+                "licensePlate": "",
+                "consumption": 6.5,
+                "fuelType": 2,
+                "make": "",
+                "id": 139812,
+                "name": "Car vehicle",
+                "model": "",
+                "costPerHour": 0,
+                "type": 0,
+                "status": 0,
+                "maxLoadWeight": 60,
+                "height": 0,
+                "maxLoadCube": 50,
+                "idDriver": 139812,
+                "endTime": 1439,
+                "fixedCost": 0,
+                "startTime": 420,
+                "lastPosition": [
+                  2147483647,
+                  2147483647
+                ]
+              },
+              {
+                "length": 0,
+                "weight": 0,
+                "width": 0,
+                "licensePlate": "",
+                "consumption": 6.5,
+                "fuelType": 2,
+                "make": "",
+                "id": 139813,
+                "name": "Car vehicle",
+                "model": "",
+                "costPerHour": 0,
+                "type": 0,
+                "status": 0,
+                "maxLoadWeight": 60,
+                "height": 0,
+                "maxLoadCube": 50,
+                "idDriver": 139813,
+                "endTime": 1439,
+                "fixedCost": 0,
+                "startTime": 420,
+                "lastPosition": [
+                  2147483647,
+                  2147483647
+                ]
+              }
+            ],
+            "departures": [
+              {
+                "depotId": 0,
+                "alias": "Departure1",
+                "address": {
+                  "streetNumber": "34",
+                  "postalCode": "86000",
+                  "streetName": "Boulevard Chasseigne",
+                  "county": "Nouvelle-Aquitaine",
+                  "state": "",
+                  "extra": "",
+                  "city": "Poitiers",
+                  "country": "France"
+                },
+                "location": [
+                  48.870569,
+                  2.356448
+                ],
+                "matchedLocation": [
+                  2147483647,
+                  2147483647
+                ],
+                "numberOfpackages": 0,
+                "weight": 0,
+                "cube": 0,
+                "departureTime": 0,
+                "timeToNext": 0,
+                "distanceToNext": 0
+              },
+              {
+                "depotId": 0,
+                "alias": "Departure2",
+                "address": {
+                  "streetNumber": "34",
+                  "postalCode": "86000",
+                  "streetName": "Boulevard Chasseigne",
+                  "county": "Nouvelle-Aquitaine",
+                  "state": "",
+                  "extra": "",
+                  "city": "Poitiers",
+                  "country": "France"
+                },
+                "location": [
+                  48.82674,
+                  2.342116
+                ],
+                "matchedLocation": [
+                  2147483647,
+                  2147483647
+                ],
+                "numberOfpackages": 0,
+                "weight": 0,
+                "cube": 0,
+                "departureTime": 0,
+                "timeToNext": 0,
+                "distanceToNext": 0
+              }
+            ],
+            "destinations": [],
+            "vehiclesConstraints": [
+              {
+                "startDate": 1596758400000,
+                "maxNumberOfPackages": 53,
+                "minNumberOfOrders": 0,
+                "maxNumberOfOrders": 99999999,
+                "minDistance": 0,
+                "maxDistance": 100000000,
+                "maxRevenue": 85,
+                "fuelPrice": 0
+              }
+            ],
+            "matrixBuildType": 1
+          },
+          "routes": [
+            {
+              "configurationParameters": {
+                "orderSequenceOptions": [],
+                "distanceUnit": 0,
+                "maxTimeToOptimize": 300,
+                "optimizationQuality": 2,
+                "routeType": 0,
+                "arrangeCriterion": 0,
+                "restrictions": 0,
+                "maxWaitTime": 18000,
+                "balancedRoutes": 0,
+                "groupingOrders": false,
+                "optimizationCriterion": 0,
+                "allowDroppingOrders": false,
+                "ignoreTimeWindow": false,
+                "name": "Paris - test optimization - Part 1"
+              },
+              "vehicleConstraints": {
+                "startDate": 1596758400000,
+                "maxNumberOfPackages": 53,
+                "minNumberOfOrders": 0,
+                "maxNumberOfOrders": 99999999,
+                "minDistance": 0,
+                "maxDistance": 100000000,
+                "maxRevenue": 85,
+                "fuelPrice": 1.0700000524520874
+              },
+              "rideStatus": 1,
+              "vehicle": {
+                "length": 0,
+                "weight": 0,
+                "width": 0,
+                "licensePlate": "",
+                "consumption": 6.5,
+                "fuelType": 2,
+                "make": "",
+                "id": 139813,
+                "name": "Car vehicle",
+                "model": "",
+                "costPerHour": 0,
+                "type": 0,
+                "status": 0,
+                "maxLoadWeight": 60,
+                "height": 0,
+                "maxLoadCube": 50,
+                "idDriver": 139813,
+                "endTime": 1439,
+                "fixedCost": 0,
+                "startTime": 420,
+                "lastPosition": [
+                  2147483647,
+                  2147483647
+                ]
+              },
+              "destination": {
+                "depotId": 0,
+                "alias": "Departure2",
+                "address": {
+                  "streetNumber": "34",
+                  "postalCode": "86000",
+                  "streetName": "Boulevard Chasseigne",
+                  "county": "Nouvelle-Aquitaine",
+                  "state": "",
+                  "extra": "",
+                  "city": "Poitiers",
+                  "country": "France"
+                },
+                "location": [
+                  48.82674,
+                  2.342116
+                ],
+                "matchedLocation": [
+                  48.82679375,
+                  2.3420853125
+                ],
+                "arrivalTime": 1596783691000,
+                "traveledDistance": 0.6638350486755371
+              },
+              "departure": {
+                "depotId": 0,
+                "alias": "Departure2",
+                "address": {
+                  "streetNumber": "34",
+                  "postalCode": "86000",
+                  "streetName": "Boulevard Chasseigne",
+                  "county": "Nouvelle-Aquitaine",
+                  "state": "",
+                  "extra": "",
+                  "city": "Poitiers",
+                  "country": "France"
+                },
+                "location": [
+                  48.82674,
+                  2.342116
+                ],
+                "matchedLocation": [
+                  48.82679375,
+                  2.3420853125
+                ],
+                "numberOfpackages": 0,
+                "weight": 0,
+                "cube": 0,
+                "departureTime": 1596783600000,
+                "timeToNext": 12,
+                "distanceToNext": 0.07019499689340591
+              },
+              "shape": "mn_iH_mhMCVuGuBQIy@s@SDOLIxFzAOlAIfHJJi@mAa@BW",
+              "creationTimestamp": 1744096606089,
+              "neededFuel": 0.04314928129315376,
+              "matrixBuildType": 1,
+              "price": 0.04616973176598549,
+              "totalWaitTime": 0,
+              "totalServiceTime": 0,
+              "optimizationId": 139950,
+              "orders": [
+                {
+                  "orderInfo": {
+                    "revenue": 0,
+                    "serviceTime": 0,
+                    "timeWindow": [
+                      420,
+                      1086
+                    ],
+                    "creationTimestamp": 1744096603223,
+                    "cube": 0,
+                    "numberOfPackages": 0,
+                    "depotId": 0,
+                    "customData": "",
+                    "weight": 0,
+                    "phoneNumber": "+12025550181",
+                    "lastName": "",
+                    "status": 1,
+                    "firstName": "",
+                    "alias": "",
+                    "state": 1,
+                    "type": 0,
+                    "priority": 0,
+                    "id": 933799,
+                    "location": [
+                      48.827327,
+                      2.342267
+                    ],
+                    "address": {
+                      "streetNumber": "",
+                      "postalCode": "",
+                      "streetName": "",
+                      "county": "",
+                      "state": "",
+                      "extra": "",
+                      "city": "",
+                      "country": ""
+                    },
+                    "customerInfo": {
+                      "phoneNumber": "+12025550181",
+                      "email": "c1@yahoo.com",
+                      "lastName": "",
+                      "firstName": "",
+                      "alias": "",
+                      "customData": "",
+                      "id": 1839506,
+                      "location": [
+                        48.827327,
+                        2.342267
+                      ],
+                      "address": {
+                        "streetNumber": "",
+                        "postalCode": "",
+                        "streetName": "",
+                        "county": "",
+                        "state": "",
+                        "extra": "",
+                        "city": "",
+                        "country": ""
+                      }
+                    }
+                  },
+                  "matchedLocation": [
+                    48.82734625,
+                    2.3421875
+                  ],
+                  "actualLocation": [
+                    0,
+                    0
+                  ],
+                  "indexInRoute": 0,
+                  "indexInOptimization": 1,
+                  "arrivalTime": 1596783612000,
+                  "timeToNextOrder": 79,
+                  "waitTime": 0,
+                  "numberOfPackagesAtArrival": 0,
+                  "collectedNumberOfPackages": 0,
+                  "deliveredNumberOfPackages": 0,
+                  "weightAtArrival": 0,
+                  "collectedWeight": 0,
+                  "deliveredWeight": 0,
+                  "cubeAtArrival": 0,
+                  "collectedCube": 0,
+                  "deliveredCube": 0,
+                  "traveledDistance": 0.07019499689340591,
+                  "distanceToNextOrder": 0.5936400294303894,
+                  "revenueAtArrival": 0,
+                  "visitTimestamp": 0
+                }
+              ],
+              "totalTime": 91,
+              "totalDistance": 0.6638350486755371,
+              "id": 255145
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+</div>
+
+---
+
+
+

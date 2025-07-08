@@ -1,0 +1,3023 @@
+---
+sidebar_position: 8
+---
+
+import ReadingTime from '../../src/components/reading-time/reading-time';
+
+# Route
+
+<ReadingTime/>
+<br/>
+
+## Overview
+
+The **Route RestAPI** allows you to manage route data, including retrieving, updating, and deleting routes. This RestAPI supports multiple request types to interact with route solutions and optimization processes.
+
+### Route Object Fields
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>id</code></td>
+      <td>Integer</td>
+      <td>Unique identifier for the route.</td>
+    </tr>
+    <tr>
+      <td><code>optimizationId</code></td>
+      <td>Integer</td>
+      <td>ID of the associated optimization.</td>
+    </tr>
+    <tr>
+      <td><code>idVehicle</code></td>
+      <td>Integer</td>
+      <td>ID of the vehicle assigned to this route.</td>
+    </tr>
+    <tr>
+      <td><code>matrixBuiltType</code></td>
+      <td>Integer</td>
+      <td>
+        <div>Distance calculation method:</div>
+        <div><code>0</code> - Set by user using "matrices" field</div>
+        <div><code>1</code> - Real road distances and times</div>
+      </td>
+    </tr>
+    <tr>
+      <td><code>matrices</code></td>
+      <td>Array</td>
+      <td>Contains distance and time matrices (set only if <code>matrixBuiltType = 0</code>).</td>
+    </tr>
+    <tr>
+      <td><code>configurationParameters</code></td>
+      <td>Object</td>
+      <td>Configuration parameters for the route.</td>
+    </tr>
+    <tr>
+      <td><code>departure</code></td>
+      <td>Object</td>
+      <td>Details of the departure location.</td>
+    </tr>
+    <tr>
+      <td><code>destination</code></td>
+      <td>Object</td>
+      <td>Details of the destination location.</td>
+    </tr>
+    <tr>
+      <td><code>vehicleConstraints</code></td>
+      <td>Array</td>
+      <td>List of vehicle constraints applied to the route.</td>
+    </tr>
+    <tr>
+      <td><code>orders</code></td>
+      <td>Array</td>
+      <td>List of orders included in the route.</td>
+    </tr>
+    <tr>
+      <td><code>totalDistance</code></td>
+      <td>Float</td>
+      <td>Total route distance (in kilometers or miles based on settings).</td>
+    </tr>
+    <tr>
+      <td><code>totalTime</code></td>
+      <td>Integer</td>
+      <td>Total duration of the route (in seconds).</td>
+    </tr>
+    <tr>
+      <td><code>totalServiceTime</code></td>
+      <td>Integer</td>
+      <td>Total service time for all orders in the route (in seconds).</td>
+    </tr>
+    <tr>
+      <td><code>totalWaitTime</code></td>
+      <td>Integer</td>
+      <td>Total wait time for the route (in seconds).</td>
+    </tr>
+    <tr>
+      <td><code>neededFuel</code></td>
+      <td>Float</td>
+      <td>Total fuel consumption for the route (liters or kWh based on fuel type).</td>
+    </tr>
+    <tr>
+      <td><code>price</code></td>
+      <td>Float</td>
+      <td>Total cost of the route, calculated based on fuel consumption and distance.</td>
+    </tr>
+    <tr>
+      <td><code>shape</code></td>
+      <td>String</td>
+      <td>Encoded polyline or list of locations representing the route.</td>
+    </tr>
+    <tr>
+      <td><code>creationTimestamp</code></td>
+      <td>Integer</td>
+      <td>Timestamp of when the route was created.</td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
+## Endpoints
+
+### 1. Get All Routes
+
+**Description:** Fetches all available routes.
+
+- **Method:** `GET`
+- **Endpoint:** `/routes`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/routes`
+- **Query Parameters:**
+  - `search` (string, *optional*) - General search term.
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>The values sent for page and per_page parameters are incorrect; should be greater than 0.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Example:
+
+- **Response Body:** (error code `200`)
+
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+
+```json
+{
+"routes": [
+    {
+      "id": 255145,
+      "optimizationId": 139950,
+      "configurationParameters": {
+        "orderSequenceOptions": [],
+        "distanceUnit": 0,
+        "maxTimeToOptimize": 300,
+        "optimizationQuality": 2,
+        "routeType": 0,
+        "arrangeCriterion": 0,
+        "restrictions": 0,
+        "maxWaitTime": 18000,
+        "balancedRoutes": 0,
+        "groupingOrders": false,
+        "optimizationCriterion": 0,
+        "allowDroppingOrders": false,
+        "ignoreTimeWindow": false,
+        "name": "Paris - test optimization - Part 1"
+      },
+      "vehicleConstraints": {
+        "startDate": 1596758400000,
+        "maxNumberOfPackages": 53,
+        "minNumberOfOrders": 0,
+        "maxNumberOfOrders": 99999999,
+        "minDistance": 0,
+        "maxDistance": 100000000,
+        "maxRevenue": 85,
+        "fuelPrice": 1.0700000524520874
+      },
+      "rideStatus": 1,
+      "vehicle": {
+        "length": 0,
+        "weight": 0,
+        "width": 0,
+        "licensePlate": "",
+        "consumption": 6.5,
+        "fuelType": 2,
+        "make": "",
+        "id": 139813,
+        "name": "Car vehicle",
+        "model": "",
+        "costPerHour": 0,
+        "type": 0,
+        "status": 0,
+        "maxLoadWeight": 60,
+        "height": 0,
+        "maxLoadCube": 50,
+        "idDriver": 139813,
+        "endTime": 1439,
+        "fixedCost": 0,
+        "startTime": 420,
+        "lastPosition": [
+          2147483647,
+          2147483647
+        ]
+      },
+      "destination": {
+        "depotId": 0,
+        "alias": "Departure2",
+        "address": {
+          "streetNumber": "34",
+          "postalCode": "86000",
+          "streetName": "Boulevard Chasseigne",
+          "county": "Nouvelle-Aquitaine",
+          "state": "",
+          "extra": "",
+          "city": "Poitiers",
+          "country": "France"
+        },
+        "location": [
+          48.82674,
+          2.342116
+        ],
+        "matchedLocation": [
+          48.82679375,
+          2.3420853125
+        ],
+        "arrivalTime": 1596783691000,
+        "traveledDistance": 0.6638350486755371
+      },
+      "departure": {
+        "depotId": 0,
+        "alias": "Departure2",
+        "address": {
+          "streetNumber": "34",
+          "postalCode": "86000",
+          "streetName": "Boulevard Chasseigne",
+          "county": "Nouvelle-Aquitaine",
+          "state": "",
+          "extra": "",
+          "city": "Poitiers",
+          "country": "France"
+        },
+        "location": [
+          48.82674,
+          2.342116
+        ],
+        "matchedLocation": [
+          48.82679375,
+          2.3420853125
+        ],
+        "numberOfpackages": 0,
+        "weight": 0,
+        "cube": 0,
+        "departureTime": 1596783600000,
+        "timeToNext": 12,
+        "distanceToNext": 0.07019499689340591
+      },
+      "shape": "mn_iH_mhMCVuGuBQIy@s@SDOLIxFzAOlAIfHJJi@mAa@BW",
+      "creationTimestamp": 1744096606089,
+      "neededFuel": 0.04314928129315376,
+      "matrixBuildType": 1,
+      "price": 0.04616973176598549,
+      "totalWaitTime": 0,
+      "totalServiceTime": 0,
+      "orders": [
+        {
+          "orderInfo": {
+            "revenue": 0,
+            "serviceTime": 0,
+            "timeWindow": [
+              420,
+              1086
+            ],
+            "creationTimestamp": 1744096603223,
+            "cube": 0,
+            "numberOfPackages": 0,
+            "depotId": 0,
+            "customData": "",
+            "weight": 0,
+            "phoneNumber": "+12025550181",
+            "lastName": "",
+            "status": 1,
+            "firstName": "",
+            "alias": "",
+            "state": 1,
+            "type": 0,
+            "priority": 0,
+            "id": 933799,
+            "location": [
+              48.827327,
+              2.342267
+            ],
+            "address": {
+              "streetNumber": "",
+              "postalCode": "",
+              "streetName": "",
+              "county": "",
+              "state": "",
+              "extra": "",
+              "city": "",
+              "country": ""
+            },
+            "customerInfo": {
+              "phoneNumber": "+12025550181",
+              "email": "c1@yahoo.com",
+              "lastName": "",
+              "firstName": "",
+              "alias": "",
+              "customData": "",
+              "id": 1839506,
+              "location": [
+                48.827327,
+                2.342267
+              ],
+              "address": {
+                "streetNumber": "",
+                "postalCode": "",
+                "streetName": "",
+                "county": "",
+                "state": "",
+                "extra": "",
+                "city": "",
+                "country": ""
+              }
+            }
+          },
+          "matchedLocation": [
+            48.82734625,
+            2.3421875
+          ],
+          "actualLocation": [
+            0,
+            0
+          ],
+          "indexInRoute": 0,
+          "indexInOptimization": 1,
+          "arrivalTime": 1596783612000,
+          "timeToNextOrder": 79,
+          "waitTime": 0,
+          "numberOfPackagesAtArrival": 0,
+          "collectedNumberOfPackages": 0,
+          "deliveredNumberOfPackages": 0,
+          "weightAtArrival": 0,
+          "collectedWeight": 0,
+          "deliveredWeight": 0,
+          "cubeAtArrival": 0,
+          "collectedCube": 0,
+          "deliveredCube": 0,
+          "traveledDistance": 0.07019499689340591,
+          "distanceToNextOrder": 0.5936400294303894,
+          "revenueAtArrival": 0,
+          "visitTimestamp": 0
+        }
+      ],
+      "totalTime": 91,
+      "totalDistance": 0.6638350486755371,
+    }
+  ]
+}
+```
+</div>
+
+---
+
+### 2. Get a Route by ID
+
+**Description:** Retrieves a specific route by its ID.
+
+- **Method:** `GET`
+- **Endpoint:** `/routes/{id}`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/routes/{id}`
+- **Path Parameter:**
+  - `id` (integer, **required*) - The unique route ID.
+- **Query Parameter:**
+  - `encodeShape` (integer, *optional*) 
+                                        - `0` : The route's shape will not be encoded. 
+                                        - `1` (default) : The route's shape will be encoded.
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Invalid input or missing required fields..</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>404 Not Found</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Route not found.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>425 Too Early</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Request not finished.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+  
+#### Example:
+
+- **Response Body:** (error code `200`)
+
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+
+```json
+{
+  "id": 255145,
+  "optimizationId": 139950,
+  "configurationParameters": {
+    "orderSequenceOptions": [],
+    "distanceUnit": 0,
+    "maxTimeToOptimize": 300,
+    "optimizationQuality": 2,
+    "routeType": 0,
+    "arrangeCriterion": 0,
+    "restrictions": 0,
+    "maxWaitTime": 18000,
+    "balancedRoutes": 0,
+    "groupingOrders": false,
+    "optimizationCriterion": 0,
+    "allowDroppingOrders": false,
+    "ignoreTimeWindow": false,
+    "name": "Paris - test optimization - Part 1"
+  },
+  "vehicleConstraints": {
+    "startDate": 1596758400000,
+    "maxNumberOfPackages": 53,
+    "minNumberOfOrders": 0,
+    "maxNumberOfOrders": 99999999,
+    "minDistance": 0,
+    "maxDistance": 100000000,
+    "maxRevenue": 85,
+    "fuelPrice": 1.0700000524520874
+  },
+  "rideStatus": 1,
+  "vehicle": {
+    "length": 0,
+    "weight": 0,
+    "width": 0,
+    "licensePlate": "",
+    "consumption": 6.5,
+    "fuelType": 2,
+    "make": "",
+    "id": 139813,
+    "name": "Car vehicle",
+    "model": "",
+    "costPerHour": 0,
+    "type": 0,
+    "status": 0,
+    "maxLoadWeight": 60,
+    "height": 0,
+    "maxLoadCube": 50,
+    "idDriver": 139813,
+    "endTime": 1439,
+    "fixedCost": 0,
+    "startTime": 420,
+    "lastPosition": [
+      2147483647,
+      2147483647
+    ]
+  },
+  "destination": {
+    "depotId": 0,
+    "alias": "Departure2",
+    "address": {
+      "streetNumber": "34",
+      "postalCode": "86000",
+      "streetName": "Boulevard Chasseigne",
+      "county": "Nouvelle-Aquitaine",
+      "state": "",
+      "extra": "",
+      "city": "Poitiers",
+      "country": "France"
+    },
+    "location": [
+      48.82674,
+      2.342116
+    ],
+    "matchedLocation": [
+      48.82679375,
+      2.3420853125
+    ],
+    "arrivalTime": 1596783691000,
+    "traveledDistance": 0.6638350486755371
+  },
+  "departure": {
+    "depotId": 0,
+    "alias": "Departure2",
+    "address": {
+      "streetNumber": "34",
+      "postalCode": "86000",
+      "streetName": "Boulevard Chasseigne",
+      "county": "Nouvelle-Aquitaine",
+      "state": "",
+      "extra": "",
+      "city": "Poitiers",
+      "country": "France"
+    },
+    "location": [
+      48.82674,
+      2.342116
+    ],
+    "matchedLocation": [
+      48.82679375,
+      2.3420853125
+    ],
+    "numberOfpackages": 0,
+    "weight": 0,
+    "cube": 0,
+    "departureTime": 1596783600000,
+    "timeToNext": 12,
+    "distanceToNext": 0.07019499689340591
+  },
+  "shape": "mn_iH_mhMCVuGuBQIy@s@SDOLIxFzAOlAIfHJJi@mAa@BW",
+  "creationTimestamp": 1744096606089,
+  "neededFuel": 0.04314928129315376,
+  "matrixBuildType": 1,
+  "price": 0.04616973176598549,
+  "totalWaitTime": 0,
+  "totalServiceTime": 0,
+  "orders": [
+    {
+      "orderInfo": {
+        "revenue": 0,
+        "serviceTime": 0,
+        "timeWindow": [
+          420,
+          1086
+        ],
+        "creationTimestamp": 1744096603223,
+        "cube": 0,
+        "numberOfPackages": 0,
+        "depotId": 0,
+        "customData": "",
+        "weight": 0,
+        "phoneNumber": "+12025550181",
+        "lastName": "",
+        "status": 1,
+        "firstName": "",
+        "alias": "",
+        "state": 1,
+        "type": 0,
+        "priority": 0,
+        "id": 933799,
+        "location": [
+          48.827327,
+          2.342267
+        ],
+        "address": {
+          "streetNumber": "",
+          "postalCode": "",
+          "streetName": "",
+          "county": "",
+          "state": "",
+          "extra": "",
+          "city": "",
+          "country": ""
+        },
+        "customerInfo": {
+          "phoneNumber": "+12025550181",
+          "email": "c1@yahoo.com",
+          "lastName": "",
+          "firstName": "",
+          "alias": "",
+          "customData": "",
+          "id": 1839506,
+          "location": [
+            48.827327,
+            2.342267
+          ],
+          "address": {
+            "streetNumber": "",
+            "postalCode": "",
+            "streetName": "",
+            "county": "",
+            "state": "",
+            "extra": "",
+            "city": "",
+            "country": ""
+          }
+        }
+      },
+      "matchedLocation": [
+        48.82734625,
+        2.3421875
+      ],
+      "actualLocation": [
+        0,
+        0
+      ],
+      "indexInRoute": 0,
+      "indexInOptimization": 1,
+      "arrivalTime": 1596783612000,
+      "timeToNextOrder": 79,
+      "waitTime": 0,
+      "numberOfPackagesAtArrival": 0,
+      "collectedNumberOfPackages": 0,
+      "deliveredNumberOfPackages": 0,
+      "weightAtArrival": 0,
+      "collectedWeight": 0,
+      "deliveredWeight": 0,
+      "cubeAtArrival": 0,
+      "collectedCube": 0,
+      "deliveredCube": 0,
+      "traveledDistance": 0.07019499689340591,
+      "distanceToNextOrder": 0.5936400294303894,
+      "revenueAtArrival": 0,
+      "visitTimestamp": 0
+    }
+  ],
+  "totalTime": 91,
+  "totalDistance": 0.6638350486755371,
+}
+```
+</div>
+
+---
+
+### 3. Update a Route
+
+**Description:** Routes can be updated with new parameters, such as vehicle or constraints. Make changes on Route and return the new solution after reptimizing the changed route.
+
+- **Method:** `PUT`
+- **Endpoint:** `/routes/{id}`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+  - `Content-Type: application/json`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/routes/{id}`
+- **Path Parameter:**
+  - `id` (integer) - The unique route ID.
+- **Query Parameter:**
+  - `encodeShape` (integer) - 0: The route's shape will not be encoded.
+                              1:(default) - The route's shape will be encoded.
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>
+        <ul style={{ margin: 0, paddingLeft: "20px" }}>
+          <li>Route’s vehicle is unavailable.</li>
+          <li>Route’s vehicle limitations are exceeded by the order’s total number of packages/weight/cubic volume.</li>
+          <li>Route’s start-end time are not valid.</li>
+          <li>No destination set for the Route, and the route type is Custom end.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>404 Not Found</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>
+        <ul style={{ margin: 0, paddingLeft: "20px" }}>
+          <li>Route was not found.</li>
+          <li>Route’s optimization was not found.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+   
+:::info[Note]
+Orders within a route **cannot be updated directly** using `Update Route` request.
+However, all other fields in the route can be modified using this method.
+
+To modify orders, refer to the following examples:
+
+* [Adding Orders to a Route](/Core_Concepts/Route#6-add-route-orders)
+* [Updating an Order from a Optimization](/Core_Concepts/Optimization#10-update-order-from-an-optimization)
+* [Deleting an Order from a Route](/Core_Concepts/Route#7-delete-an-order-from-a-route)
+:::
+
+#### Example:
+
+- **Request Body:**
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+
+```json
+{
+  "id": 250806,
+  "optimizationId": 137211,
+  "configurationParameters": {
+    "orderSequenceOptions": [],
+    "distanceUnit": 0,
+    "maxTimeToOptimize": 300,
+    "optimizationQuality": 2,
+    "routeType": 0,
+    "arrangeCriterion": 0,
+    "restrictions": 0,
+    "maxWaitTime": 18000,
+    "balancedRoutes": 0,
+    "groupingOrders": false,
+    "optimizationCriterion": 0,
+    "allowDroppingOrders": false,
+    "ignoreTimeWindow": false,
+    "name": "Paris - test optimization - Part 1"
+  },
+  "vehicleConstraints": {
+    "startDate": 1596758400000,
+    "maxNumberOfPackages": 53,
+    "minNumberOfOrders": 0,
+    "maxNumberOfOrders": 99999999,
+    "minDistance": 0,
+    "maxDistance": 100000000,
+    "maxRevenue": 85,
+    "fuelPrice": 1.0700000524520874
+  },
+  "rideStatus": 1,
+  "vehicle": {
+    "length": 0,
+    "weight": 0,
+    "width": 0,
+    "licensePlate": "",
+    "consumption": 6.5,
+    "fuelType": 2,
+    "make": "",
+    "id": 134764,
+    "name": "Car vehicle",
+    "model": "",
+    "costPerHour": 0,
+    "type": 0,
+    "status": 0,
+    "maxLoadWeight": 60,
+    "height": 0,
+    "maxLoadCube": 50,
+    "idDriver": 134764,
+    "endTime": 1439,
+    "fixedCost": 0,
+    "startTime": 420,
+    "lastPosition": [
+      2147483647,
+      2147483647
+    ]
+  },
+  "destination": {
+    "depotId": 0,
+    "alias": "Departure2",
+    "address": {
+      "streetNumber": "34",
+      "postalCode": "86000",
+      "streetName": "Boulevard Chasseigne",
+      "county": "Nouvelle-Aquitaine",
+      "state": "",
+      "extra": "",
+      "city": "Poitiers",
+      "country": "France"
+    },
+    "location": [
+      48.82674,
+      2.342116
+    ],
+    "matchedLocation": [
+      48.82679375,
+      2.3420853125
+    ],
+    "arrivalTime": 1596783691000,
+    "traveledDistance": 0.6638350486755371
+  },
+  "departure": {
+    "depotId": 0,
+    "alias": "Departure2",
+    "address": {
+      "streetNumber": "34",
+      "postalCode": "86000",
+      "streetName": "Boulevard Chasseigne",
+      "county": "Nouvelle-Aquitaine",
+      "state": "",
+      "extra": "",
+      "city": "Poitiers",
+      "country": "France"
+    },
+    "location": [
+      48.82674,
+      2.342116
+    ],
+    "matchedLocation": [
+      48.82679375,
+      2.3420853125
+    ],
+    "numberOfpackages": 0,
+    "weight": 0,
+    "cube": 0,
+    "departureTime": 1596783600000,
+    "timeToNext": 12,
+    "distanceToNext": 0.07019499689340591
+  },
+  "shape": "mn_iH_mhMCVuGuBQIy@s@SDOLIxFzAOlAIfHJJi@mAa@BW",
+  "creationTimestamp": 1742220618730,
+  "neededFuel": 0.04314928129315376,
+  "matrixBuildType": 1,
+  "price": 0.04616973176598549,
+  "totalWaitTime": 0,
+  "totalServiceTime": 0,
+  "orders": [
+    {
+      "orderInfo": {
+        "revenue": 0,
+        "serviceTime": 0,
+        "timeWindow": [
+          420,
+          1086
+        ],
+        "creationTimestamp": 1742220613856,
+        "cube": 0,
+        "numberOfPackages": 0,
+        "depotId": 0,
+        "customData": "",
+        "weight": 0,
+        "phoneNumber": "+12025550181",
+        "lastName": "",
+        "status": 1,
+        "firstName": "",
+        "alias": "",
+        "state": 1,
+        "type": 0,
+        "priority": 0,
+        "id": 876534,
+        "location": [
+          48.827327,
+          2.342267
+        ],
+        "address": {
+          "streetNumber": "",
+          "postalCode": "",
+          "streetName": "",
+          "county": "",
+          "state": "",
+          "extra": "",
+          "city": "",
+          "country": ""
+        },
+        "customerInfo": {
+          "phoneNumber": "+12025550181",
+          "email": "c1@yahoo.com",
+          "lastName": "",
+          "firstName": "",
+          "alias": "",
+          "customData": "",
+          "id": 1786643,
+          "location": [
+            48.827327,
+            2.342267
+          ],
+          "address": {
+            "streetNumber": "",
+            "postalCode": "",
+            "streetName": "",
+            "county": "",
+            "state": "",
+            "extra": "",
+            "city": "",
+            "country": ""
+          }
+        }
+      },
+      "matchedLocation": [
+        48.82734625,
+        2.3421875
+      ],
+      "actualLocation": [
+        0,
+        0
+      ],
+      "indexInRoute": 0,
+      "indexInOptimization": 1,
+      "arrivalTime": 1596783612000,
+      "timeToNextOrder": 79,
+      "waitTime": 0,
+      "numberOfPackagesAtArrival": 0,
+      "collectedNumberOfPackages": 0,
+      "deliveredNumberOfPackages": 0,
+      "weightAtArrival": 0,
+      "collectedWeight": 0,
+      "deliveredWeight": 0,
+      "cubeAtArrival": 0,
+      "collectedCube": 0,
+      "deliveredCube": 0,
+      "traveledDistance": 0.07019499689340591,
+      "distanceToNextOrder": 0.5936400294303894,
+      "revenueAtArrival": 0,
+      "visitTimestamp": 0
+    }
+  ],
+  "totalTime": 91,
+  "totalDistance": 0.6638350486755371,
+}
+```
+</div>
+
+- **Response Body:** (error code `200`)
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+
+```json
+{
+"id": 250806,
+"optimizationId": 137211,
+"configurationParameters": {
+    "orderSequenceOptions": [],
+    "distanceUnit": 0,
+    "maxTimeToOptimize": 300,
+    "optimizationQuality": 2,
+    "routeType": 1,
+    "arrangeCriterion": 0,
+    "restrictions": 0,
+    "maxWaitTime": 18000,
+    "balancedRoutes": 0,
+    "groupingOrders": false,
+    "optimizationCriterion": 0,
+    "allowDroppingOrders": false,
+    "ignoreTimeWindow": false,
+    "name": "Paris - test optimization - Part 1 updated"
+  },
+"vehicleConstraints": {
+    "startDate": 1596758400000,
+    "maxNumberOfPackages": 85,
+    "minNumberOfOrders": 0,
+    "maxNumberOfOrders": 99999999,
+    "minDistance": 0,
+    "maxDistance": 999999,
+    "maxRevenue": 85,
+    "fuelPrice": 1.0700000524520874
+  },
+  "rideStatus": 1,
+  "vehicle": {
+    "length": 0,
+    "weight": 0,
+    "width": 0,
+    "licensePlate": "",
+    "consumption": 6.5,
+    "fuelType": 2,
+    "make": "",
+    "id": 134764,
+    "name": "Car vehicle",
+    "model": "",
+    "costPerHour": 0,
+    "type": 0,
+    "status": 0,
+    "maxLoadWeight": 60,
+    "height": 0,
+    "maxLoadCube": 50,
+    "idDriver": 134764,
+    "endTime": 1439,
+    "fixedCost": 0,
+    "startTime": 420,
+    "lastPosition": [
+      2147483647,
+      2147483647
+    ]
+  },
+  "destination": {
+    "depotId": 0,
+    "alias": "Departure2",
+    "address": {
+      "streetNumber": "34",
+      "postalCode": "86000",
+      "streetName": "Boulevard Chasseigne",
+      "county": "Nouvelle-Aquitaine",
+      "state": "",
+      "extra": "",
+      "city": "Poitiers",
+      "country": "France"
+    },
+    "location": [
+      48.82674,
+      2.342116
+    ],
+    "matchedLocation": [
+      48.82679375,
+      2.3420853125
+    ],
+    "arrivalTime": 1596783691000,
+    "traveledDistance": 0.6638350486755371
+  },
+  "departure": {
+    "depotId": 0,
+    "alias": "Departure2",
+    "address": {
+      "streetNumber": "34",
+      "postalCode": "86000",
+      "streetName": "Boulevard Chasseigne",
+      "county": "Nouvelle-Aquitaine",
+      "state": "",
+      "extra": "",
+      "city": "Poitiers",
+      "country": "France"
+    },
+    "location": [
+      48.82674,
+      2.342116
+    ],
+    "matchedLocation": [
+      48.82679375,
+      2.3420853125
+    ],
+    "numberOfpackages": 0,
+    "weight": 0,
+    "cube": 0,
+    "departureTime": 1596783600000,
+    "timeToNext": 12,
+    "distanceToNext": 0.07019499689340591
+  },
+  "shape": "mn_iH_mhMCVuGuBQIy@s@SDOLIxFzAOlAIfHJJi@mAa@BW",
+  "creationTimestamp": 1742220618730,
+  "neededFuel": 0.04314928129315376,
+  "matrixBuildType": 1,
+  "price": 0.04616973176598549,
+  "totalWaitTime": 0,
+  "totalServiceTime": 0,
+  "orders": [
+    {
+      "orderInfo": {
+        "revenue": 0,
+        "serviceTime": 0,
+        "timeWindow": [
+          420,
+          1086
+        ],
+        "creationTimestamp": 1742220613856,
+        "cube": 0,
+        "numberOfPackages": 0,
+        "depotId": 0,
+        "customData": "",
+        "weight": 0,
+        "phoneNumber": "+12025550181",
+        "lastName": "",
+        "status": 1,
+        "firstName": "",
+        "alias": "",
+        "state": 1,
+        "type": 0,
+        "priority": 0,
+        "id": 876534,
+        "location": [
+          48.827327,
+          2.342267
+        ],
+        "address": {
+          "streetNumber": "",
+          "postalCode": "",
+          "streetName": "",
+          "county": "",
+          "state": "",
+          "extra": "",
+          "city": "",
+          "country": ""
+        },
+        "customerInfo": {
+          "phoneNumber": "+12025550181",
+          "email": "c1@yahoo.com",
+          "lastName": "",
+          "firstName": "",
+          "alias": "",
+          "customData": "",
+          "id": 1786643,
+          "location": [
+            48.827327,
+            2.342267
+          ],
+          "address": {
+            "streetNumber": "",
+            "postalCode": "",
+            "streetName": "",
+            "county": "",
+            "state": "",
+            "extra": "",
+            "city": "",
+            "country": ""
+          }
+        }
+      },
+      "matchedLocation": [
+        48.82734625,
+        2.3421875
+      ],
+      "actualLocation": [
+        0,
+        0
+      ],
+      "indexInRoute": 0,
+      "indexInOptimization": 1,
+      "arrivalTime": 1596783612000,
+      "timeToNextOrder": 79,
+      "waitTime": 0,
+      "numberOfPackagesAtArrival": 0,
+      "collectedNumberOfPackages": 0,
+      "deliveredNumberOfPackages": 0,
+      "weightAtArrival": 0,
+      "collectedWeight": 0,
+      "deliveredWeight": 0,
+      "cubeAtArrival": 0,
+      "collectedCube": 0,
+      "deliveredCube": 0,
+      "traveledDistance": 0.07019499689340591,
+      "distanceToNextOrder": 0.5936400294303894,
+      "revenueAtArrival": 0,
+      "visitTimestamp": 0
+    }
+  ],
+  "totalTime": 91,
+  "totalDistance": 0.6638350486755371,
+}
+```
+</div>
+---
+
+### 4. Delete Routes
+
+**Description:** Delete the routes from the list. Routes can be deleted individually or in bulk.
+
+- **Method:** `DELETE`
+- **Endpoint:** `/routes`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+  - `Content-Type: application/json`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/routes`
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Invalid input or missing required fields.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>404 Not Found</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Can't delete the routes because at least one of them does not exist.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>425 Too Early</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Request not finished.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+
+:::info[Note]
+The orders of a deleted route will also be deleted from the optimization to which the route belongs.
+If the route is the only route of an optimization, then it cannot be deleted, instead delete the optimization (see [Delete Optimization](/Core_Concepts/Optimization#5-delete-an-optimization)).
+:::
+
+#### Example:
+
+- **Request Body:**
+  
+```json
+{
+  "ids": [123, 456]
+}
+```
+- **Response Body:** (error code `200`)
+  
+```json
+{
+  "message": "Operation done successfully",
+}
+```
+
+---
+
+### 5. Reoptimize a Route
+
+**Description:** Reoptimization allows you to find a better solution for an existing route.
+
+- **Method:** `PUT`
+- **Endpoint:** `/routes/{id}/reoptimize`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/routes/{id}/reoptimize`
+- **Path Parameter:**
+  - `id` (integer, **required*) - The unique route ID.
+- **Query Parameter:**
+  - `encodeShape` (integer, *optional*) 
+                                        - `0`: The route's shape will not be encoded. 
+                                        - `1` (default): The route's shape will be encoded.
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>
+        <ul style={{ margin: 0, paddingLeft: "20px" }}>
+          <li>Route’s vehicle is unavailable.</li>
+          <li>Route’s vehicle limitations are exceeded by the order’s total number of packages/weight/cubic volume.</li>
+          <li>Route’s start-end time are not valid.</li>
+          <li>No destination set for the Route, and the route type is Custom end.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>404 Not Found</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>
+        <ul style={{ margin: 0, paddingLeft: "20px" }}>
+          <li>Route was not found.</li>
+          <li>Route’s optimization was not found.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+
+:::info[Note]
+Rearranges the orders in a better order of visit, if exists. The latest fuel prices are used to calculate the route's cost (see [Get Fuel Prices](/Core_Concepts/FuelPrice) example).
+:::
+
+#### Example:
+
+- **Response Body:** (error code `200`)
+```json
+{
+  "id": 767456,
+  "optimizationId": 56646,
+  "routeId": 221356,
+  "status": 0,
+  "message": "Operation done successfully!",
+  "creationTimestamp": 1743324342543
+}
+```
+---
+
+### 6. Add Route Orders
+
+**Description:** Add a list of orders into an existing route's orders list. The orders will also be added in the optimization's orders list.
+
+- **Method:** `POST`
+- **Endpoint:** `/routes/{id}/orders`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+  - `Content-Type: application/json`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/routes/{id}/orders`
+- **Path Parameter:**
+  - `id` (integer, **required*) - The unique route ID.
+- **Query Parameters:**
+  - `reoptimize` (integer, *optional*)
+                                      - `0`: (default) - If the route will not be re-optimized, the orders will be added to the end of the route.
+                                      - `1`: The route will be re-optimized.
+  - `encodeShape` (integer, *optional*) 
+                                         - `0`: The route's shape will not be encoded.
+                                         - `1`(default) : - The route's shape will be encoded.
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>
+        <ul style={{ margin: 0, paddingLeft: "20px" }}>
+          <li>One of the orders is used in another operation.</li>
+          <li>One of the orders time window is outside the route’s start-end time interval.</li>
+          <li>(For matrix build type=Set by user) The distances and times to all the orders of the route’s optimization were not set.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>404 Not Found</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>
+        <ul style={{ margin: 0, paddingLeft: "20px" }}>
+          <li>The route’s optimization was not found.</li>
+          <li>The solution of the route’s optimization was not found.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+  
+:::info[Note]
+There are three options to add orders to a route:
+    - at the end of the route's orders list.
+    - at the optimal positions, which are determined by the algorithm.The orders are inserted at the best positions between the route's orders, without rearranging the route's orders.
+    - at specified positions between the route's orders.
+
+The route can be reoptimized, which means that after the addition, the route orders will be rearranged in the best order of visit, so it doesn’t matter which option was chosen to add the orders.
+The orders will be also added in the list of orders of the route's optimization.
+:::
+
+#### Example:
+
+- **Request Body:**
+```json
+{
+  "orders": [
+    {
+      "id": 899037,
+      "position": 0
+    },
+    {
+      "id": 899038,
+      "position": 0
+    }
+  ],
+  "optimalPosition": true,
+}
+```
+
+- **Response Body:** (error code `200`)
+:::info[note]
+There are two possible responses:  
+1. If the route is reoptimized, the response will be a request object with the status of the request.  
+2. If the route is not reoptimized, the response will be the updated route.
+:::
+
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+
+```json
+{
+  "id": 255145,
+  "optimizationId": 139950,
+  "configurationParameters": {
+    "orderSequenceOptions": [],
+    "distanceUnit": 0,
+    "maxTimeToOptimize": 300,
+    "optimizationQuality": 2,
+    "routeType": 0,
+    "arrangeCriterion": 0,
+    "restrictions": 0,
+    "maxWaitTime": 18000,
+    "balancedRoutes": 0,
+    "groupingOrders": false,
+    "optimizationCriterion": 0,
+    "allowDroppingOrders": false,
+    "ignoreTimeWindow": false,
+    "name": "Paris - test optimization - Part 1"
+  },
+  "vehicleConstraints": {
+    "startDate": 1596758400000,
+    "maxNumberOfPackages": 53,
+    "minNumberOfOrders": 0,
+    "maxNumberOfOrders": 99999999,
+    "minDistance": 0,
+    "maxDistance": 100000000,
+    "maxRevenue": 85,
+    "fuelPrice": 1.0700000524520874
+  },
+  "rideStatus": 1,
+  "vehicle": {
+    "length": 0,
+    "weight": 0,
+    "width": 0,
+    "licensePlate": "",
+    "consumption": 6.5,
+    "fuelType": 2,
+    "make": "",
+    "id": 139813,
+    "name": "Car vehicle",
+    "model": "",
+    "costPerHour": 0,
+    "type": 0,
+    "status": 0,
+    "maxLoadWeight": 60,
+    "height": 0,
+    "maxLoadCube": 50,
+    "idDriver": 139813,
+    "endTime": 1439,
+    "fixedCost": 0,
+    "startTime": 420,
+    "lastPosition": [
+      2147483647,
+      2147483647
+    ]
+  },
+  "destination": {
+    "depotId": 0,
+    "alias": "Departure2",
+    "address": {
+      "streetNumber": "34",
+      "postalCode": "86000",
+      "streetName": "Boulevard Chasseigne",
+      "county": "Nouvelle-Aquitaine",
+      "state": "",
+      "extra": "",
+      "city": "Poitiers",
+      "country": "France"
+    },
+    "location": [
+      48.82674,
+      2.342116
+    ],
+    "matchedLocation": [
+      48.82679375,
+      2.3420853125
+    ],
+    "arrivalTime": 1596783691000,
+    "traveledDistance": 0.6638350486755371
+  },
+  "departure": {
+    "depotId": 0,
+    "alias": "Departure2",
+    "address": {
+      "streetNumber": "34",
+      "postalCode": "86000",
+      "streetName": "Boulevard Chasseigne",
+      "county": "Nouvelle-Aquitaine",
+      "state": "",
+      "extra": "",
+      "city": "Poitiers",
+      "country": "France"
+    },
+    "location": [
+      48.82674,
+      2.342116
+    ],
+    "matchedLocation": [
+      48.82679375,
+      2.3420853125
+    ],
+    "numberOfpackages": 0,
+    "weight": 0,
+    "cube": 0,
+    "departureTime": 1596783600000,
+    "timeToNext": 12,
+    "distanceToNext": 0.07019499689340591
+  },
+  "shape": "mn_iH_mhMCVuGuBQIy@s@SDOLIxFzAOlAIfHJJi@mAa@BW",
+  "creationTimestamp": 1744096606089,
+  "neededFuel": 0.04314928129315376,
+  "matrixBuildType": 1,
+  "price": 0.04616973176598549,
+  "totalWaitTime": 0,
+  "totalServiceTime": 0,
+  "orders": [
+    {
+      "orderInfo": {
+        "revenue": 0,
+        "serviceTime": 0,
+        "timeWindow": [
+          420,
+          1086
+        ],
+        "creationTimestamp": 1744096603223,
+        "cube": 0,
+        "numberOfPackages": 0,
+        "depotId": 0,
+        "customData": "",
+        "weight": 0,
+        "phoneNumber": "+12025550181",
+        "lastName": "",
+        "status": 1,
+        "firstName": "",
+        "alias": "",
+        "state": 1,
+        "type": 0,
+        "priority": 0,
+        "id": 933799,
+        "location": [
+          48.827327,
+          2.342267
+        ],
+        "address": {
+          "streetNumber": "",
+          "postalCode": "",
+          "streetName": "",
+          "county": "",
+          "state": "",
+          "extra": "",
+          "city": "",
+          "country": ""
+        },
+        "customerInfo": {
+          "phoneNumber": "+12025550181",
+          "email": "c1@yahoo.com",
+          "lastName": "",
+          "firstName": "",
+          "alias": "",
+          "customData": "",
+          "id": 1839506,
+          "location": [
+            48.827327,
+            2.342267
+          ],
+          "address": {
+            "streetNumber": "",
+            "postalCode": "",
+            "streetName": "",
+            "county": "",
+            "state": "",
+            "extra": "",
+            "city": "",
+            "country": ""
+          }
+        }
+      },
+      "matchedLocation": [
+        48.82734625,
+        2.3421875
+      ],
+      "actualLocation": [
+        0,
+        0
+      ],
+      "indexInRoute": 0,
+      "indexInOptimization": 1,
+      "arrivalTime": 1596783612000,
+      "timeToNextOrder": 79,
+      "waitTime": 0,
+      "numberOfPackagesAtArrival": 0,
+      "collectedNumberOfPackages": 0,
+      "deliveredNumberOfPackages": 0,
+      "weightAtArrival": 0,
+      "collectedWeight": 0,
+      "deliveredWeight": 0,
+      "cubeAtArrival": 0,
+      "collectedCube": 0,
+      "deliveredCube": 0,
+      "traveledDistance": 0.07019499689340591,
+      "distanceToNextOrder": 0.5936400294303894,
+      "revenueAtArrival": 0,
+      "visitTimestamp": 0
+    },
+    {
+      "orderInfo": {
+        "revenue": 0,
+        "serviceTime": 0,
+        "timeWindow": [
+          420,
+          1086
+        ],
+        "creationTimestamp": 1744096603223,
+        "cube": 0,
+        "numberOfPackages": 0,
+        "depotId": 0,
+        "customData": "",
+        "weight": 0,
+        "phoneNumber": "+12025550181",
+        "lastName": "",
+        "status": 1,
+        "firstName": "",
+        "alias": "",
+        "state": 1,
+        "type": 0,
+        "priority": 0,
+        "id": 899037,
+        "location": [
+          48.827327,
+          2.342267
+        ],
+        "address": {
+          "streetNumber": "",
+          "postalCode": "",
+          "streetName": "",
+          "county": "",
+          "state": "",
+          "extra": "",
+          "city": "",
+          "country": ""
+        },
+        "customerInfo": {
+          "phoneNumber": "+12025550181",
+          "email": "c1@yahoo.com",
+          "lastName": "",
+          "firstName": "",
+          "alias": "",
+          "customData": "",
+          "id": 1839506,
+          "location": [
+            48.9867892,
+            2.3453345
+          ],
+          "address": {
+            "streetNumber": "",
+            "postalCode": "",
+            "streetName": "",
+            "county": "",
+            "state": "",
+            "extra": "",
+            "city": "",
+            "country": ""
+          }
+        }
+      },
+      "matchedLocation": [
+        48.9867892,
+        2.3453345
+      ],
+      "actualLocation": [
+        0,
+        0
+      ],
+      "indexInRoute": 0,
+      "indexInOptimization": 1,
+      "arrivalTime": 1596783612000,
+      "timeToNextOrder": 79,
+      "waitTime": 0,
+      "numberOfPackagesAtArrival": 0,
+      "collectedNumberOfPackages": 0,
+      "deliveredNumberOfPackages": 0,
+      "weightAtArrival": 0,
+      "collectedWeight": 0,
+      "deliveredWeight": 0,
+      "cubeAtArrival": 0,
+      "collectedCube": 0,
+      "deliveredCube": 0,
+      "traveledDistance": 0.90019499689340591,
+      "distanceToNextOrder": 0.3640029430003894,
+      "revenueAtArrival": 0,
+      "visitTimestamp": 0
+    },
+    {
+      "orderInfo": {
+        "revenue": 0,
+        "serviceTime": 0,
+        "timeWindow": [
+          420,
+          1086
+        ],
+        "creationTimestamp": 1744096603223,
+        "cube": 0,
+        "numberOfPackages": 0,
+        "depotId": 0,
+        "customData": "",
+        "weight": 0,
+        "phoneNumber": "+12025550181",
+        "lastName": "",
+        "status": 1,
+        "firstName": "",
+        "alias": "",
+        "state": 1,
+        "type": 0,
+        "priority": 0,
+        "id": 899038,
+        "location": [
+          48.787420,
+          2.673783
+        ],
+        "address": {
+          "streetNumber": "",
+          "postalCode": "",
+          "streetName": "",
+          "county": "",
+          "state": "",
+          "extra": "",
+          "city": "",
+          "country": ""
+        },
+        "customerInfo": {
+          "phoneNumber": "+12234550181",
+          "email": "c2@yahoo.com",
+          "lastName": "",
+          "firstName": "",
+          "alias": "",
+          "customData": "",
+          "id": 1839507,
+          "location": [
+            48.787420,
+            2.673783
+          ],
+          "address": {
+            "streetNumber": "",
+            "postalCode": "",
+            "streetName": "",
+            "county": "",
+            "state": "",
+            "extra": "",
+            "city": "",
+            "country": ""
+          }
+        }
+      },
+      "matchedLocation": [
+        48.787420,
+        2.673783
+      ],
+      "actualLocation": [
+        0,
+        0
+      ],
+      "indexInRoute": 0,
+      "indexInOptimization": 1,
+      "arrivalTime": 1596783742000,
+      "timeToNextOrder": 79,
+      "waitTime": 0,
+      "numberOfPackagesAtArrival": 0,
+      "collectedNumberOfPackages": 0,
+      "deliveredNumberOfPackages": 0,
+      "weightAtArrival": 0,
+      "collectedWeight": 0,
+      "deliveredWeight": 0,
+      "cubeAtArrival": 0,
+      "collectedCube": 0,
+      "deliveredCube": 0,
+      "traveledDistance": 1.23019499689340591,
+      "distanceToNextOrder": 0.4536400294303894,
+      "revenueAtArrival": 0,
+      "visitTimestamp": 0
+    }
+  ],
+  "totalTime": 91,
+  "totalDistance": 0.6638350486755371,
+    }
+```
+</div>
+---
+
+### 7. Delete an Order from a Route
+
+**Description:** Delete an order from an existing route. The order will also be deleted from the optimization. 
+- **Method:** `DELETE`
+- **Endpoint:** `/routes/{id}/orders/{orderId}`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/routes/{id}/orders/{orderId}`
+- **Path Parameters:**
+  - `id` (integer, **required*) - The unique route ID.
+  - `orderId` (integer, **required*) - The unique order ID.
+- **Query Parameter:**
+  - `encodeShape` (integer, *optional*) 
+                                            - `0`: The route's shape will not be encoded.
+                                            - `1`(default) : - The route's shape will be encoded.
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>If the route has only one order, the order cannot be deleted.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>404 Not Found</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>
+        <ul style={{ margin: 0, paddingLeft: "20px" }}>
+          <li>The route’s optimization was not found.</li>
+          <li>The solution of the route’s optimization was not found.</li>
+          <li>The order was not scheduled for any route.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+
+:::info[Note]
+A route must contain at least two orders for one to be deleted. If the order you want to delete is the only one in the route, it cannot be deleted.
+:::
+
+#### Example:
+
+- **Response Body:** (error code `200`)
+
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+
+```json
+{
+  "id": 255145,
+  "optimizationId": 139950,
+  "configurationParameters": {
+    "orderSequenceOptions": [],
+    "distanceUnit": 0,
+    "maxTimeToOptimize": 300,
+    "optimizationQuality": 2,
+    "routeType": 0,
+    "arrangeCriterion": 0,
+    "restrictions": 0,
+    "maxWaitTime": 18000,
+    "balancedRoutes": 0,
+    "groupingOrders": false,
+    "optimizationCriterion": 0,
+    "allowDroppingOrders": false,
+    "ignoreTimeWindow": false,
+    "name": "Paris - test optimization - Part 1"
+  },
+  "vehicleConstraints": {
+    "startDate": 1596758400000,
+    "maxNumberOfPackages": 53,
+    "minNumberOfOrders": 0,
+    "maxNumberOfOrders": 99999999,
+    "minDistance": 0,
+    "maxDistance": 100000000,
+    "maxRevenue": 85,
+    "fuelPrice": 1.0700000524520874
+  },
+  "rideStatus": 1,
+  "vehicle": {
+    "length": 0,
+    "weight": 0,
+    "width": 0,
+    "licensePlate": "",
+    "consumption": 6.5,
+    "fuelType": 2,
+    "make": "",
+    "id": 139813,
+    "name": "Car vehicle",
+    "model": "",
+    "costPerHour": 0,
+    "type": 0,
+    "status": 0,
+    "maxLoadWeight": 60,
+    "height": 0,
+    "maxLoadCube": 50,
+    "idDriver": 139813,
+    "endTime": 1439,
+    "fixedCost": 0,
+    "startTime": 420,
+    "lastPosition": [
+      2147483647,
+      2147483647
+    ]
+  },
+  "destination": {
+    "depotId": 0,
+    "alias": "Departure2",
+    "address": {
+      "streetNumber": "34",
+      "postalCode": "86000",
+      "streetName": "Boulevard Chasseigne",
+      "county": "Nouvelle-Aquitaine",
+      "state": "",
+      "extra": "",
+      "city": "Poitiers",
+      "country": "France"
+    },
+    "location": [
+      48.82674,
+      2.342116
+    ],
+    "matchedLocation": [
+      48.82679375,
+      2.3420853125
+    ],
+    "arrivalTime": 1596783691000,
+    "traveledDistance": 0.6638350486755371
+  },
+  "departure": {
+    "depotId": 0,
+    "alias": "Departure2",
+    "address": {
+      "streetNumber": "34",
+      "postalCode": "86000",
+      "streetName": "Boulevard Chasseigne",
+      "county": "Nouvelle-Aquitaine",
+      "state": "",
+      "extra": "",
+      "city": "Poitiers",
+      "country": "France"
+    },
+    "location": [
+      48.82674,
+      2.342116
+    ],
+    "matchedLocation": [
+      48.82679375,
+      2.3420853125
+    ],
+    "numberOfpackages": 0,
+    "weight": 0,
+    "cube": 0,
+    "departureTime": 1596783600000,
+    "timeToNext": 12,
+    "distanceToNext": 0.07019499689340591
+  },
+  "shape": "mn_iH_mhMCVuGuBQIy@s@SDOLIxFzAOlAIfHJJi@mAa@BW",
+  "creationTimestamp": 1744096606089,
+  "neededFuel": 0.04314928129315376,
+  "matrixBuildType": 1,
+  "price": 0.04616973176598549,
+  "totalWaitTime": 0,
+  "totalServiceTime": 0,
+  "orders": [
+    {
+      "orderInfo": {
+        "revenue": 0,
+        "serviceTime": 0,
+        "timeWindow": [
+          420,
+          1086
+        ],
+        "creationTimestamp": 1744096603223,
+        "cube": 0,
+        "numberOfPackages": 0,
+        "depotId": 0,
+        "customData": "",
+        "weight": 0,
+        "phoneNumber": "+12025550181",
+        "lastName": "",
+        "status": 1,
+        "firstName": "",
+        "alias": "",
+        "state": 1,
+        "type": 0,
+        "priority": 0,
+        "id": 933799,
+        "location": [
+          48.827327,
+          2.342267
+        ],
+        "address": {
+          "streetNumber": "",
+          "postalCode": "",
+          "streetName": "",
+          "county": "",
+          "state": "",
+          "extra": "",
+          "city": "",
+          "country": ""
+        },
+        "customerInfo": {
+          "phoneNumber": "+12025550181",
+          "email": "c1@yahoo.com",
+          "lastName": "",
+          "firstName": "",
+          "alias": "",
+          "customData": "",
+          "id": 1839506,
+          "location": [
+            48.827327,
+            2.342267
+          ],
+          "address": {
+            "streetNumber": "",
+            "postalCode": "",
+            "streetName": "",
+            "county": "",
+            "state": "",
+            "extra": "",
+            "city": "",
+            "country": ""
+          }
+        }
+      },
+      "matchedLocation": [
+        48.82734625,
+        2.3421875
+      ],
+      "actualLocation": [
+        0,
+        0
+      ],
+      "indexInRoute": 0,
+      "indexInOptimization": 1,
+      "arrivalTime": 1596783612000,
+      "timeToNextOrder": 79,
+      "waitTime": 0,
+      "numberOfPackagesAtArrival": 0,
+      "collectedNumberOfPackages": 0,
+      "deliveredNumberOfPackages": 0,
+      "weightAtArrival": 0,
+      "collectedWeight": 0,
+      "deliveredWeight": 0,
+      "cubeAtArrival": 0,
+      "collectedCube": 0,
+      "deliveredCube": 0,
+      "traveledDistance": 0.07019499689340591,
+      "distanceToNextOrder": 0.5936400294303894,
+      "revenueAtArrival": 0,
+      "visitTimestamp": 0
+    }
+  ],
+  "totalTime": 91,
+  "totalDistance": 0.6638350486755371,
+    }
+```
+</div>
+---
+
+### 8. Merge Routes
+
+**Description:** Merge multiple routes into a new one. A new optimization will be created for the merged route. The optimization will have same configuration parameters, vehicle constraints and the rest of the fields as the first route from the list. The merged route will not be optimized.
+
+- **Method:** `POST`
+- **Endpoint:** `/routes/merge`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+  - `Content-Type: application/json`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/routes/merge`
+- **Query Parameter:**
+  - `encodeShape` (integer, *optional*) 
+                                            - `0`: The route's shape will not be encoded.
+                                            - `1`(default) : - The route's shape will be encoded.
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>
+        <ul style={{ margin: 0, paddingLeft: "20px" }}>
+          <li>One of the routes has matrix build type = Set by user and cannot be merged because of that.</li>
+          <li>The routes do not have the same vehicle type.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>404 Not Found</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>One of the routes was not found.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+  
+:::info[Warning]
+Routes with matrices build type set to `EMatrixBuildType::MBT_Set`, cannot be merged.
+:::
+
+#### Example:
+
+- **Request Body:**
+
+```json
+{
+  [250995, 250996]
+}
+```
+
+- **Response Body:** (error code `200`)
+
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+
+```json
+{  
+  "id": 250999,
+  "optimizationId": 137369,
+  "configurationParameters": {
+    "orderSequenceOptions": [],
+    "distanceUnit": 0,
+    "maxTimeToOptimize": 300,
+    "optimizationQuality": 2,
+    "routeType": 0,
+    "arrangeCriterion": 0,
+    "restrictions": 0,
+    "maxWaitTime": 0,
+    "balancedRoutes": 0,
+    "groupingOrders": false,
+    "optimizationCriterion": 1,
+    "allowDroppingOrders": false,
+    "ignoreTimeWindow": true,
+    "name": "Merge routes 250996  250995  - Part 0"
+  },
+  "vehicleConstraints": {
+    "startDate": 1742860800000,
+    "maxNumberOfPackages": 53,
+    "minNumberOfOrders": 0,
+    "maxNumberOfOrders": 99999999,
+    "minDistance": 0,
+    "maxDistance": 100000000,
+    "maxRevenue": 85,
+    "fuelPrice": 1.0700000524520874
+  },
+  "rideStatus": 1,
+  "vehicle": {
+    "length": 0,
+    "weight": 0,
+    "width": 0,
+    "licensePlate": "",
+    "consumption": 6.5,
+    "fuelType": 2,
+    "make": "",
+    "id": 135027,
+    "name": "Car vehicle",
+    "model": "",
+    "costPerHour": 20,
+    "type": 0,
+    "status": 0,
+    "maxLoadWeight": 60,
+    "height": 0,
+    "maxLoadCube": 50,
+    "idDriver": 135027,
+    "endTime": 1439,
+    "fixedCost": 150.5,
+    "startTime": 727,
+    "lastPosition": [
+      2147483647,
+      2147483647
+    ]
+  },
+  "destination": {
+    "depotId": 0,
+    "alias": "departure2",
+    "address": {
+      "streetNumber": "34",
+      "postalCode": "86000",
+      "streetName": "Boulevard Chasseigne",
+      "county": "Nouvelle-Aquitaine",
+      "state": "",
+      "extra": "",
+      "city": "Poitiers",
+      "country": "France"
+    },
+    "location": [
+      48.826295,
+      2.343264
+    ],
+    "matchedLocation": [
+      48.82623,
+      2.343238125
+    ],
+    "arrivalTime": 1742948951000,
+    "traveledDistance": 90.75505065917969
+  },
+  "departure": {
+    "depotId": 0,
+    "alias": "departure2",
+    "address": {
+      "streetNumber": "34",
+      "postalCode": "86000",
+      "streetName": "Boulevard Chasseigne",
+      "county": "Nouvelle-Aquitaine",
+      "state": "",
+      "extra": "",
+      "city": "Poitiers",
+      "country": "France"
+    },
+    "location": [
+      48.826295,
+      2.343264
+    ],
+    "matchedLocation": [
+      48.82623,
+      2.343238125
+    ],
+    "numberOfpackages": 34,
+    "weight": 49.20000076293945,
+    "cube": 21.600000381469727,
+    "departureTime": 1742927130605,
+    "timeToNext": 413,
+    "distanceToNext": 2.7538180351257324
+  },
+  "shape": "{j_iHgthMt@sJBq@t@_J@g@[aQkAyi@}",
+  "creationTimestamp": 1742904432224,
+  "neededFuel": 5.899078369140625,
+  "matrixBuildType": 1,
+  "price": 276.81201171875,
+  "totalWaitTime": 0,
+  "totalServiceTime": 8960,
+  "orders": [
+    {
+      "orderInfo": {
+        "revenue": 14.699999809265137,
+        "serviceTime": 750,
+        "timeWindow": [
+          1060,
+          1387
+        ],
+        "creationTimestamp": 1742904432067,
+        "cube": 4.599999904632568,
+        "numberOfPackages": 11,
+        "depotId": 0,
+        "customData": "",
+        "weight": 12.100000381469727,
+        "phoneNumber": "+12025550181",
+        "lastName": "",
+        "status": 1,
+        "firstName": "",
+        "alias": "",
+        "state": 1,
+        "type": 1,
+        "priority": 0,
+        "id": 878525,
+        "location": [
+          48.827865,
+          2.379216
+        ],
+        "address": {
+          "streetNumber": "",
+          "postalCode": "",
+          "streetName": "",
+          "county": "",
+          "state": "",
+          "extra": "",
+          "city": "",
+          "country": ""
+        },
+        "customerInfo": {
+          "phoneNumber": "+12025550181",
+          "email": "c6@yahoo.com",
+          "lastName": "",
+          "firstName": "",
+          "alias": "",
+          "customData": "",
+          "id": 1789281,
+          "location": [
+            48.827865,
+            2.379216
+          ],
+          "address": {
+            "streetNumber": "",
+            "postalCode": "",
+            "streetName": "",
+            "county": "",
+            "state": "",
+            "extra": "",
+            "city": "",
+            "country": ""
+          }
+        }
+      },
+      "matchedLocation": [
+        48.82792,
+        2.3791415625
+      ],
+      "actualLocation": [
+        0,
+        0
+      ],
+      "indexInRoute": 0,
+      "indexInOptimization": 0,
+      "arrivalTime": 1742927544000,
+      "timeToNextOrder": 535,
+      "waitTime": 0,
+      "numberOfPackagesAtArrival": 34,
+      "collectedNumberOfPackages": 0,
+      "deliveredNumberOfPackages": 11,
+      "weightAtArrival": 49.20000076293945,
+      "collectedWeight": 0,
+      "deliveredWeight": 12.100000381469727,
+      "cubeAtArrival": 21.600000381469727,
+      "collectedCube": 0,
+      "deliveredCube": 4.599999904632568,
+      "traveledDistance": 2.7538180351257324,
+      "distanceToNextOrder": 3.6211578845977783,
+      "revenueAtArrival": 0,
+      "visitTimestamp": 0
+    },
+    {
+      "orderInfo": {
+        "revenue": 2.700000047683716,
+        "serviceTime": 200,
+        "timeWindow": [
+          1060,
+          1343
+        ],
+        "creationTimestamp": 1742904432067,
+        "cube": 5.800000190734863,
+        "numberOfPackages": 8,
+        "depotId": 0,
+        "customData": "",
+        "weight": 15.399999618530273,
+        "phoneNumber": "+12025550181",
+        "lastName": "",
+        "status": 1,
+        "firstName": "",
+        "alias": "",
+        "state": 1,
+        "type": 1,
+        "priority": 0,
+        "id": 878526,
+        "location": [
+          48.845198,
+          2.402896
+        ],
+        "address": {
+          "streetNumber": "",
+          "postalCode": "",
+          "streetName": "",
+          "county": "",
+          "state": "",
+          "extra": "",
+          "city": "",
+          "country": ""
+        },
+        "customerInfo": {
+          "phoneNumber": "+12025550181",
+          "email": "c2@yahoo.com",
+          "lastName": "",
+          "firstName": "",
+          "alias": "",
+          "customData": "",
+          "id": 1789277,
+          "location": [
+            48.845198,
+            2.402896
+          ],
+          "address": {
+            "streetNumber": "",
+            "postalCode": "",
+            "streetName": "",
+            "county": "",
+            "state": "",
+            "extra": "",
+            "city": "",
+            "country": ""
+          }
+        }
+      },
+      "matchedLocation": [
+        48.8452625,
+        2.4027009375
+      ],
+      "actualLocation": [
+        0,
+        0
+      ],
+      "indexInRoute": 1,
+      "indexInOptimization": 1,
+      "arrivalTime": 1742928829000,
+      "timeToNextOrder": 855,
+      "waitTime": 0,
+      "numberOfPackagesAtArrival": 23,
+      "collectedNumberOfPackages": 0,
+      "deliveredNumberOfPackages": 8,
+      "weightAtArrival": 37.099998474121094,
+      "collectedWeight": 0,
+      "deliveredWeight": 15.399999618530273,
+      "cubeAtArrival": 17,
+      "collectedCube": 0,
+      "deliveredCube": 5.800000190734863,
+      "traveledDistance": 6.37497615814209,
+      "distanceToNextOrder": 9.219883918762207,
+      "revenueAtArrival": 14.699999809265137,
+      "visitTimestamp": 0
+    },
+    {
+      "orderInfo": {
+        "revenue": 10,
+        "serviceTime": 900,
+        "timeWindow": [
+          1093,
+          1360
+        ],
+        "creationTimestamp": 1742904432067,
+        "cube": 9.699999809265137,
+        "numberOfPackages": 9,
+        "depotId": 0,
+        "customData": "",
+        "weight": 16.5,
+        "phoneNumber": "+12025550181",
+        "lastName": "",
+        "status": 1,
+        "firstName": "",
+        "alias": "",
+        "state": 1,
+        "type": 1,
+        "priority": 0,
+        "id": 878527,
+        "location": [
+          48.90092,
+          2.400039
+        ],
+        "address": {
+          "streetNumber": "",
+          "postalCode": "",
+          "streetName": "",
+          "county": "",
+          "state": "",
+          "extra": "",
+          "city": "",
+          "country": ""
+        },
+        "customerInfo": {
+          "phoneNumber": "+12025550181",
+          "email": "c4@yahoo.com",
+          "lastName": "",
+          "firstName": "",
+          "alias": "",
+          "customData": "",
+          "id": 1789279,
+          "location": [
+            48.90092,
+            2.400039
+          ],
+          "address": {
+            "streetNumber": "",
+            "postalCode": "",
+            "streetName": "",
+            "county": "",
+            "state": "",
+            "extra": "",
+            "city": "",
+            "country": ""
+          }
+        }
+      },
+      "matchedLocation": [
+        48.9005959375,
+        2.4000475
+      ],
+      "actualLocation": [
+        0,
+        0
+      ],
+      "indexInRoute": 2,
+      "indexInOptimization": 2,
+      "arrivalTime": 1742929884000,
+      "timeToNextOrder": 971,
+      "waitTime": 0,
+      "numberOfPackagesAtArrival": 15,
+      "collectedNumberOfPackages": 0,
+      "deliveredNumberOfPackages": 9,
+      "weightAtArrival": 21.69999885559082,
+      "collectedWeight": 0,
+      "deliveredWeight": 16.5,
+      "cubeAtArrival": 11.199999809265137,
+      "collectedCube": 0,
+      "deliveredCube": 9.699999809265137,
+      "traveledDistance": 15.594860076904297,
+      "distanceToNextOrder": 9.614479064941406,
+      "revenueAtArrival": 17.399999618530273,
+      "visitTimestamp": 0
+    },
+    {
+      "orderInfo": {
+        "revenue": 7.5,
+        "serviceTime": 600,
+        "timeWindow": [
+          1043,
+          1387
+        ],
+        "creationTimestamp": 1742904432067,
+        "cube": 8.399999618530273,
+        "numberOfPackages": 9,
+        "depotId": 0,
+        "customData": "",
+        "weight": 16.200000762939453,
+        "phoneNumber": "+12025550181",
+        "lastName": "",
+        "status": 1,
+        "firstName": "",
+        "alias": "",
+        "state": 1,
+        "type": 0,
+        "priority": 0,
+        "id": 878531,
+        "location": [
+          48.897163,
+          2.292865
+        ],
+        "address": {
+          "streetNumber": "",
+          "postalCode": "",
+          "streetName": "",
+          "county": "",
+          "state": "",
+          "extra": "",
+          "city": "",
+          "country": ""
+        },
+        "customerInfo": {
+          "phoneNumber": "+12025550181",
+          "email": "c3@yahoo.com",
+          "lastName": "",
+          "firstName": "",
+          "alias": "",
+          "customData": "",
+          "id": 1789278,
+          "location": [
+            48.897163,
+            2.292865
+          ],
+          "address": {
+            "streetNumber": "",
+            "postalCode": "",
+            "streetName": "",
+            "county": "",
+            "state": "",
+            "extra": "",
+            "city": "",
+            "country": ""
+          }
+        }
+      },
+      "matchedLocation": [
+        48.89706375,
+        2.29247
+      ],
+      "actualLocation": [
+        0,
+        0
+      ],
+      "indexInRoute": 6,
+      "indexInOptimization": 6,
+      "arrivalTime": 1742935187000,
+      "timeToNextOrder": 404,
+      "waitTime": 0,
+      "numberOfPackagesAtArrival": 29,
+      "collectedNumberOfPackages": 9,
+      "deliveredNumberOfPackages": 0,
+      "weightAtArrival": 16.299999237060547,
+      "collectedWeight": 16.200000762939453,
+      "deliveredWeight": 0,
+      "cubeAtArrival": 20.5,
+      "collectedCube": 8.399999618530273,
+      "deliveredCube": 0,
+      "traveledDistance": 34.35464096069336,
+      "distanceToNextOrder": 2.4328789710998535,
+      "revenueAtArrival": 37.79999923706055,
+      "visitTimestamp": 0
+    },
+    {
+      "orderInfo": {
+        "revenue": 2.9000000953674316,
+        "serviceTime": 800,
+        "timeWindow": [
+          1077,
+          1377
+        ],
+        "creationTimestamp": 1742904432067,
+        "cube": 1.5,
+        "numberOfPackages": 6,
+        "depotId": 0,
+        "customData": "",
+        "weight": 5.199999809265137,
+        "phoneNumber": "+12025550181",
+        "lastName": "",
+        "status": 1,
+        "firstName": "",
+        "alias": "",
+        "state": 1,
+        "type": 1,
+        "priority": 0,
+        "id": 878532,
+        "location": [
+          48.887096,
+          2.283513
+        ],
+        "address": {
+          "streetNumber": "",
+          "postalCode": "",
+          "streetName": "",
+          "county": "",
+          "state": "",
+          "extra": "",
+          "city": "",
+          "country": ""
+        },
+        "customerInfo": {
+          "phoneNumber": "+12025550181",
+          "email": "c7@yahoo.com",
+          "lastName": "",
+          "firstName": "",
+          "alias": "",
+          "customData": "",
+          "id": 1789282,
+          "location": [
+            48.887096,
+            2.283513
+          ],
+          "address": {
+            "streetNumber": "",
+            "postalCode": "",
+            "streetName": "",
+            "county": "",
+            "state": "",
+            "extra": "",
+            "city": "",
+            "country": ""
+          }
+        }
+      },
+      "matchedLocation": [
+        48.886898125,
+        2.2838078125
+      ],
+      "actualLocation": [
+        0,
+        0
+      ],
+      "indexInRoute": 7,
+      "indexInOptimization": 7,
+      "arrivalTime": 1742936191000,
+      "timeToNextOrder": 1286,
+      "waitTime": 0,
+      "numberOfPackagesAtArrival": 38,
+      "collectedNumberOfPackages": 0,
+      "deliveredNumberOfPackages": 6,
+      "weightAtArrival": 32.5,
+      "collectedWeight": 0,
+      "deliveredWeight": 5.199999809265137,
+      "cubeAtArrival": 28.899999618530273,
+      "collectedCube": 0,
+      "deliveredCube": 1.5,
+      "traveledDistance": 36.78752136230469,
+      "distanceToNextOrder": 10.027785301208496,
+      "revenueAtArrival": 45.29999923706055,
+      "visitTimestamp": 0
+    }
+  ],
+  "totalTime": 21820,
+  "totalDistance": 90.75505065917969,
+}
+```
+</div>
+---
+
+### 9. Unlink a Route from its Optimization
+
+**Description:** Unlinks a route from its optimization. The route will no longer be a part of the optimization's solution. The orders used in this route will be deleted from the optimization. A new optimization will be created for the unlinked route. The new optimization will have same configuration parameters, vehicle constraints and the rest of the fields as the unlinked route.
+- **Method:** `POST`
+- **Endpoint:** `/routes/{id}/unlink`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/routes/{id}/unlink`
+- **Path Parameters:**
+  - `id` (integer, **required*) - The unique route ID.
+- **Query Parameter:**
+  - `encodeShape` (integer, *optional*) 
+                                        - `0`: The route's shape will not be encoded. 
+                                        - `1` (default): The route's shape will be encoded.
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>If the route is the only one in the optimization’s solution it cannot be deleted (Tip: delete the optimization instead).</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>404 Not Found</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>
+        <ul style={{ margin: 0, paddingLeft: "20px" }}>
+          <li>The route’s optimization was not found.</li>
+          <li>The solution of the route’s optimization was not found.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+:::warning[Info]
+ The route cannot be unlinked if it is the only route in the optimization's solution.
+:::
+
+#### Example:
+
+- **Response Body:** (error code `200`)
+
+ <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+
+```json
+{  "id": 250807,
+  "optimizationId": 137212,
+  "configurationParameters": {
+    "orderSequenceOptions": [],
+    "distanceUnit": 0,
+    "maxTimeToOptimize": 300,
+    "optimizationQuality": 2,
+    "routeType": 0,
+    "arrangeCriterion": 0,
+    "restrictions": 0,
+    "maxWaitTime": 18000,
+    "balancedRoutes": 0,
+    "groupingOrders": false,
+    "optimizationCriterion": 0,
+    "allowDroppingOrders": false,
+    "ignoreTimeWindow": false,
+    "name": "Unlinked route Paris - test optimization - Part 1"
+  },
+  "vehicleConstraints": {
+    "startDate": 1596758400000,
+    "maxNumberOfPackages": 53,
+    "minNumberOfOrders": 0,
+    "maxNumberOfOrders": 99999999,
+    "minDistance": 0,
+    "maxDistance": 100000000,
+    "maxRevenue": 85,
+    "fuelPrice": 1.0700000524520874
+  },
+  "rideStatus": 1,
+  "vehicle": {
+    "length": 0,
+    "weight": 0,
+    "width": 0,
+    "licensePlate": "",
+    "consumption": 6.5,
+    "fuelType": 2,
+    "make": "",
+    "id": 134764,
+    "name": "Car vehicle",
+    "model": "",
+    "costPerHour": 0,
+    "type": 0,
+    "status": 0,
+    "maxLoadWeight": 60,
+    "height": 0,
+    "maxLoadCube": 50,
+    "idDriver": 134764,
+    "endTime": 1439,
+    "fixedCost": 0,
+    "startTime": 420,
+    "lastPosition": [
+      2147483647,
+      2147483647
+    ]
+  },
+  "destination": {
+    "depotId": 0,
+    "alias": "Departure2",
+    "address": {
+      "streetNumber": "34",
+      "postalCode": "86000",
+      "streetName": "Boulevard Chasseigne",
+      "county": "Nouvelle-Aquitaine",
+      "state": "",
+      "extra": "",
+      "city": "Poitiers",
+      "country": "France"
+    },
+    "location": [
+      48.82674,
+      2.342116
+    ],
+    "matchedLocation": [
+      48.82679375,
+      2.3420853125
+    ],
+    "arrivalTime": 1596783691000,
+    "traveledDistance": 0.6638350486755371
+  },
+  "departure": {
+    "depotId": 0,
+    "alias": "Departure2",
+    "address": {
+      "streetNumber": "34",
+      "postalCode": "86000",
+      "streetName": "Boulevard Chasseigne",
+      "county": "Nouvelle-Aquitaine",
+      "state": "",
+      "extra": "",
+      "city": "Poitiers",
+      "country": "France"
+    },
+    "location": [
+      48.82674,
+      2.342116
+    ],
+    "matchedLocation": [
+      48.82679375,
+      2.3420853125
+    ],
+    "numberOfpackages": 0,
+    "weight": 0,
+    "cube": 0,
+    "departureTime": 1596783600000,
+    "timeToNext": 12,
+    "distanceToNext": 0.07019499689340591
+  },
+  "shape": "mn_iH_mhMCVuGuBQIy@s@SDOLIxFzAOlAIfHJJi@mAa@BW",
+  "creationTimestamp": 1742220618730,
+  "neededFuel": 0.04314928129315376,
+  "matrixBuildType": 1,
+  "price": 0.04616973176598549,
+  "totalWaitTime": 0,
+  "totalServiceTime": 0,
+  "orders": [
+    {
+      "orderInfo": {
+        "revenue": 0,
+        "serviceTime": 0,
+        "timeWindow": [
+          420,
+          1086
+        ],
+        "creationTimestamp": 1742220613856,
+        "cube": 0,
+        "numberOfPackages": 0,
+        "depotId": 0,
+        "customData": "",
+        "weight": 0,
+        "phoneNumber": "+12025550181",
+        "lastName": "",
+        "status": 1,
+        "firstName": "",
+        "alias": "",
+        "state": 1,
+        "type": 0,
+        "priority": 0,
+        "id": 876534,
+        "location": [
+          48.827327,
+          2.342267
+        ],
+        "address": {
+          "streetNumber": "",
+          "postalCode": "",
+          "streetName": "",
+          "county": "",
+          "state": "",
+          "extra": "",
+          "city": "",
+          "country": ""
+        },
+        "customerInfo": {
+          "phoneNumber": "+12025550181",
+          "email": "c1@yahoo.com",
+          "lastName": "",
+          "firstName": "",
+          "alias": "",
+          "customData": "",
+          "id": 1786643,
+          "location": [
+            48.827327,
+            2.342267
+          ],
+          "address": {
+            "streetNumber": "",
+            "postalCode": "",
+            "streetName": "",
+            "county": "",
+            "state": "",
+            "extra": "",
+            "city": "",
+            "country": ""
+          }
+        }
+      },
+      "matchedLocation": [
+        48.82734625,
+        2.3421875
+      ],
+      "actualLocation": [
+        0,
+        0
+      ],
+      "indexInRoute": 0,
+      "indexInOptimization": 1,
+      "arrivalTime": 1596783612000,
+      "timeToNextOrder": 79,
+      "waitTime": 0,
+      "numberOfPackagesAtArrival": 0,
+      "collectedNumberOfPackages": 0,
+      "deliveredNumberOfPackages": 0,
+      "weightAtArrival": 0,
+      "collectedWeight": 0,
+      "deliveredWeight": 0,
+      "cubeAtArrival": 0,
+      "collectedCube": 0,
+      "deliveredCube": 0,
+      "traveledDistance": 0.07019499689340591,
+      "distanceToNextOrder": 0.5936400294303894,
+      "revenueAtArrival": 0,
+      "visitTimestamp": 0
+    }
+  ],
+  "totalTime": 91,
+  "totalDistance": 0.6638350486755371
+}
+```
+</div>
+---
+
+
+

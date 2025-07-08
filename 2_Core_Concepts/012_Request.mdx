@@ -1,0 +1,282 @@
+---
+sidebar_position: 12
+---
+
+import ReadingTime from '../../src/components/reading-time/reading-time';
+
+# Request
+
+<ReadingTime/>
+<br/>
+
+## Overview
+
+The **Request RestAPI** allows you to manage requests within the Fleet Management system. You can create, retrieve, update, and delete request data. This RestAPI supports filtering, sorting, and pagination to help manage large datasets efficiently.
+
+### Request Object Fields
+
+import React from 'react';
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>id</code></td>
+      <td>Integer</td>
+      <td>Unique identifier for the request.</td>
+    </tr>
+    <tr>
+      <td><code>optimizationId</code></td>
+      <td>Integer</td>
+      <td>
+        The ID of the associated optimization.<br></br>
+        <em>Only available in the JSON response if the request is an optimization request.</em>
+      </td>
+    </tr>
+    <tr>
+      <td><code>routeId</code></td>
+      <td>Integer</td>
+      <td>
+        The ID of the associated route.<br></br>
+        <em>Only available in the JSON response if the request is a route request.</em>
+      </td>
+    </tr>
+    <tr>
+      <td><code>status</code></td>
+      <td>Integer</td>
+      <td>
+        <div>Current status of the request:</div>
+        <div><code>0</code> - Created</div>
+        <div><code>1</code> - Pending</div>
+        <div><code>2</code> - Finished</div>
+        <div><code>3</code> - Canceled</div>
+      </td>
+    </tr>
+    <tr>
+      <td><code>message</code></td>
+      <td>String</td>
+      <td>Status message for the request.</td>
+    </tr>
+    <tr>
+      <td><code>creationTimestamp</code></td>
+      <td>Integer</td>
+      <td>Timestamp when the request was created.</td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
+## Endpoints
+
+### 1. Get All Requests
+
+**Description:** Fetches a list of all requests.
+
+- **Method:** `GET`
+- **Endpoint:** `/requests`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/requests`
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Invalid input or missing required fields.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Example:
+
+- **Response Body:** (error code `200`)
+
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+
+```json
+{
+  "requests": [
+    {
+      "id": 23412,
+      "optimizationId": 32754,
+      "status": 0,
+      "message": "Operation done successfully!",
+      "creationTimestamp": 1747834619
+    },
+    {
+      "id": 23456,
+      "routeId": 46578,
+      "status": 0,
+      "message": "Operation done successfully!",
+      "creationTimestamp": 1745676643
+    },
+    {
+      "id": 23567,
+      "routeId": 46587,
+      "status": 0,
+      "message": "Operation done successfully!",
+      "creationTimestamp": 1747786578
+    }
+  ]
+}
+```
+</div>
+
+---
+
+### 2. Get a Request by ID
+
+**Description:** Retrieves a specific request by ID.
+
+- **Method:** `GET`
+- **Endpoint:** `/requests/{id}`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/requests/{id}`
+- **Path Parameter:**
+  - `id` (integer) - The unique request ID.
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Invalid input or missing required fields.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>404 Not Found</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Request not found in database.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Example:
+
+- **Response Body:** (error code `200`)
+:::info[note]
+In this example, the request contains only the routeId, which means it is a route request.
+:::
+<div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
+
+```json
+{
+  "id": 23567,
+  "routeId": 46587,
+  "status": 0,
+  "message": "Operation done successfully!",
+  "creationTimestamp": 1747786578
+}
+```
+</div>
+---
+
+### 3. Cancel Request
+
+**Description:** Cancel request.
+
+- **Method:** `DELETE`
+- **Endpoint:** `/requests`
+- **Headers:**
+  - `Authorization: YOUR_API_KEY`
+- **URL:** `https://fleetmanagement.magiclaneapis.com/v1/requests`
+- **Path Parameter:**
+  - `id` (integer) - The unique request ID.
+- **Returned error codes:**
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#f5f5f5" }}>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Error Code</th>
+      <th style={{ padding: "12px", borderBottom: "2px solid #ddd" }}>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>200 Successful</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Successful operation.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>400 Bad Request</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Request done, cannot be canceled anymore.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>401 Unauthorized</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>API key is missing or invalid.</td>
+    </tr>
+	<tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>404 Not Found</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Request not found in database.</td>
+    </tr>
+    <tr>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}><code>405 Method Not Allowed</code></td>
+      <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>Incorrect method type.</td>
+    </tr>
+    <tr>
+      <td style={{ whiteSpace: 'nowrap', padding: "12px" }}><code>500 Internal Server Error</code></td>
+      <td style={{ padding: "12px" }}>Database error occurred.</td>
+    </tr>
+  </tbody>
+</table>
+
+:::info[note]
+When a request is canceled, the corresponding operation that the request is tracking is also canceled. This means that any ongoing processes or actions associated with this request will be stopped immediately, ensuring that no further progress is made on the task.
+:::
+
+#### Example:
+
+- **Response Body:** (error code `200`)
+```json
+{
+  "message":  "Operation done successfully!"
+}
+```
+---
