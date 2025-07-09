@@ -2,11 +2,10 @@
 sidebar_position: 4
 ---
 
-import { AddVehicles } from './_data/vehicle';
-import { GetVehicles } from './_data/vehicle';
-import { GetVehicle } from './_data/vehicle';
-import CodeBlock from '@theme/CodeBlock';
-import ReadingTime from '../../src/components/reading-time/reading-time';
+
+
+
+
 
 # Vehicle
 
@@ -219,7 +218,60 @@ The **Vehicle RestAPI** allows you to manage vehicle records within the Fleet Ma
 
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(AddVehicles, null, 2)}
+```json
+[
+  {
+    "type": 0,
+    "status": 0,
+    "name": "Car vehicle 1",
+    "manufacturer": "Renault",
+    "model": "Master",
+    "fuelType": 2,
+    "lastPosition": [
+      48.870569,
+      2.356448
+    ],
+    "consumption": 6.5,
+    "plate": "AA-123-AA",
+    "maxLoadWeight": 60,
+    "maxLoadCube": 50,
+    "height": 0,
+    "width": 0,
+    "weight": 0,
+    "length": 0,
+    "axleLoad": 0,
+    "fixedCost": 0,
+    "costPerHour": 0,
+    "startTime": 420,
+    "endTime": 1439
+  },
+  {
+    "type": 0,
+    "status": 0,
+    "name": "Car vehicle 2",
+    "manufacturer": "Renault",
+    "model": "Master",
+    "fuelType": 2,
+    "lastPosition": [
+      48.82674,
+      2.342116
+    ],
+    "consumption": 6.5,
+    "plate": "AA-124-AA",
+    "maxLoadWeight": 60,
+    "maxLoadCube": 50,
+    "height": 0,
+    "width": 0,
+    "weight": 0,
+    "length": 0,
+    "axleLoad": 0,
+    "fixedCost": 0,
+    "costPerHour": 0,
+    "startTime": 420,
+    "endTime": 1439
+  }
+]
+```
 </CodeBlock>
 </div>
 
@@ -227,7 +279,64 @@ The **Vehicle RestAPI** allows you to manage vehicle records within the Fleet Ma
 
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(GetVehicles, null, 2)}
+```json
+{
+  "vehicles": [
+    {
+      "id": 135932,
+      "type": 0,
+      "status": 0,
+      "name": "Car vehicle 1",
+      "manufacturer": "Renault",
+      "model": "Master",
+      "fuelType": 2,
+      "lastPosition": [
+        48.870569,
+        2.356448
+      ],
+      "consumption": 6.5,
+      "plate": "AA-123-AA",
+      "maxLoadWeight": 60,
+      "maxLoadCube": 50,
+      "height": 0,
+      "width": 0,
+      "weight": 0,
+      "length": 0,
+      "axleLoad": 0,
+      "fixedCost": 0,
+      "costPerHour": 0,
+      "startTime": 420,
+      "endTime": 1439
+    },
+    {
+      "id": 135933,
+      "type": 0,
+      "status": 0,
+      "name": "Car vehicle 2",
+      "manufacturer": "Renault",
+      "model": "Master",
+      "fuelType": 2,
+      "lastPosition": [
+        48.82674,
+        2.342116
+      ],
+      "consumption": 6.5,
+      "plate": "AA-124-AA",
+      "maxLoadWeight": 60,
+      "maxLoadCube": 50,
+      "height": 0,
+      "width": 0,
+      "weight": 0,
+      "length": 0,
+      "axleLoad": 0,
+      "fixedCost": 0,
+      "costPerHour": 0,
+      "startTime": 420,
+      "endTime": 1439
+    }
+  ]
+}
+```
 </CodeBlock>
 </div>
 
@@ -302,7 +411,64 @@ The **Vehicle RestAPI** allows you to manage vehicle records within the Fleet Ma
 
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(GetVehicles, null, 2)}
+```json
+{
+  "vehicles": [
+    {
+      "id": 135932,
+      "type": 0,
+      "status": 0,
+      "name": "Car vehicle 1",
+      "manufacturer": "Renault",
+      "model": "Master",
+      "fuelType": 2,
+      "lastPosition": [
+        48.870569,
+        2.356448
+      ],
+      "consumption": 6.5,
+      "plate": "AA-123-AA",
+      "maxLoadWeight": 60,
+      "maxLoadCube": 50,
+      "height": 0,
+      "width": 0,
+      "weight": 0,
+      "length": 0,
+      "axleLoad": 0,
+      "fixedCost": 0,
+      "costPerHour": 0,
+      "startTime": 420,
+      "endTime": 1439
+    },
+    {
+      "id": 135933,
+      "type": 0,
+      "status": 0,
+      "name": "Car vehicle 2",
+      "manufacturer": "Renault",
+      "model": "Master",
+      "fuelType": 2,
+      "lastPosition": [
+        48.82674,
+        2.342116
+      ],
+      "consumption": 6.5,
+      "plate": "AA-124-AA",
+      "maxLoadWeight": 60,
+      "maxLoadCube": 50,
+      "height": 0,
+      "width": 0,
+      "weight": 0,
+      "length": 0,
+      "axleLoad": 0,
+      "fixedCost": 0,
+      "costPerHour": 0,
+      "startTime": 420,
+      "endTime": 1439
+    }
+  ]
+}
+```
 </CodeBlock>
 </div>
 ---
@@ -360,7 +526,34 @@ The **Vehicle RestAPI** allows you to manage vehicle records within the Fleet Ma
 
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(GetVehicle, null, 2)}
+```json
+{
+  "id": 135932,
+  "type": 0,
+  "status": 0,
+  "name": "Car vehicle 1",
+  "manufacturer": "Renault",
+  "model": "Master",
+  "fuelType": 2,
+  "lastPosition": [
+    48.870569,
+    2.356448
+  ],
+  "consumption": 6.5,
+  "plate": "AA-123-AA",
+  "maxLoadWeight": 60,
+  "maxLoadCube": 50,
+  "height": 0,
+  "width": 0,
+  "weight": 0,
+  "length": 0,
+  "axleLoad": 0,
+  "fixedCost": 0,
+  "costPerHour": 0,
+  "startTime": 420,
+  "endTime": 1439
+}
+```
 </CodeBlock>
 </div>
 
@@ -426,7 +619,34 @@ The **Vehicle RestAPI** allows you to manage vehicle records within the Fleet Ma
   
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(GetVehicle, null, 2)}
+```json
+{
+  "id": 135932,
+  "type": 0,
+  "status": 0,
+  "name": "Car vehicle 1",
+  "manufacturer": "Renault",
+  "model": "Master",
+  "fuelType": 2,
+  "lastPosition": [
+    48.870569,
+    2.356448
+  ],
+  "consumption": 6.5,
+  "plate": "AA-123-AA",
+  "maxLoadWeight": 60,
+  "maxLoadCube": 50,
+  "height": 0,
+  "width": 0,
+  "weight": 0,
+  "length": 0,
+  "axleLoad": 0,
+  "fixedCost": 0,
+  "costPerHour": 0,
+  "startTime": 420,
+  "endTime": 1439
+}
+```
 </CodeBlock>
 </div>
 

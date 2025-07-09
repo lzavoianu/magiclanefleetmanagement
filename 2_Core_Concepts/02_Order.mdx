@@ -2,11 +2,10 @@
 sidebar_position: 2
 ---
 
-import { AddOrders } from './_data/order';
-import { GetOrders } from './_data/order';
-import { GetOrder } from './_data/order';
-import CodeBlock from '@theme/CodeBlock';
-import ReadingTime from '../../src/components/reading-time/reading-time';
+
+
+
+
 
 # Order
 
@@ -220,7 +219,80 @@ The **Order RestAPI** allows you to manage orders within the Fleet Management sy
 
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(AddOrders, null, 2)}
+```json
+[
+  {
+    "customerId": 1838721,
+    "location": [
+      48.870852,
+      2.356148
+    ],
+    "alias": "Magic Order",
+    "firstName": "Magic",
+    "lastName": "Order",
+    "address": {
+      "country": "",
+      "state": "",
+      "county": "",
+      "city": "",
+      "postalCode": "",
+      "streetName": "",
+      "streetNumber": ""
+    },
+    "phoneNumber": "+1202555018",
+    "customData": "",
+    "type": 0,
+    "status": 0,
+    "state": 1,
+    "priority": 0,
+    "numberOfPackages": 3,
+    "weight": 5.1,
+    "cube": 2.5,
+    "revenue": 12,
+    "timeWindow": [
+      420,
+      1086
+    ],
+    "serviceTime": 0,
+    "depotId": 0
+  },
+  {
+    "customerId": 1838722,
+    "location": [
+      48.827865,
+      2.379216
+    ],
+    "alias": "Magic Order2",
+    "firstName": "Magic2",
+    "lastName": "Order2",
+    "address": {
+      "country": "",
+      "state": "",
+      "county": "",
+      "city": "",
+      "postalCode": "",
+      "streetName": "",
+      "streetNumber": ""
+    },
+    "phoneNumber": "+1202555019",
+    "customData": "",
+    "type": 0,
+    "status": 0,
+    "state": 1,
+    "priority": 0,
+    "numberOfPackages": 2,
+    "weight": 4.5,
+    "cube": 1.1,
+    "revenue": 16,
+    "timeWindow": [
+      420,
+      1086
+    ],
+    "serviceTime": 0,
+    "depotId": 0
+  }
+]
+```
 </CodeBlock>
 </div>
 
@@ -228,7 +300,128 @@ The **Order RestAPI** allows you to manage orders within the Fleet Management sy
 
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(GetOrders, null, 2)}
+```json
+{
+  "orders": [
+    {
+      "id": 879887,
+      "creationTimestamp": 1752060273222,
+      "customerInfo": {
+        "id": 1838721,
+        "alias": "Magic Customer",
+        "firstName": "Magic",
+        "lastName": "Customer",
+        "address": {
+          "country": "",
+          "state": "",
+          "county": "",
+          "city": "",
+          "postalCode": "",
+          "streetName": "",
+          "streetNumber": ""
+        },
+        "email": "magiccustomer@example.com",
+        "phoneNumber": "+1202555018",
+        "location": [
+          48.870852,
+          2.356148
+        ],
+        "customData": ""
+      },
+      "location": [
+        48.870852,
+        2.356148
+      ],
+      "alias": "Magic Order",
+      "firstName": "Magic",
+      "lastName": "Order",
+      "address": {
+        "country": "",
+        "state": "",
+        "county": "",
+        "city": "",
+        "postalCode": "",
+        "streetName": "",
+        "streetNumber": ""
+      },
+      "phoneNumber": "+1202555018",
+      "customData": "",
+      "type": 0,
+      "status": 0,
+      "state": 1,
+      "priority": 0,
+      "numberOfPackages": 3,
+      "weight": 5.1,
+      "cube": 2.5,
+      "revenue": 12,
+      "timeWindow": [
+        420,
+        1086
+      ],
+      "serviceTime": 0,
+      "depotId": 0
+    },
+    {
+      "id": 879888,
+      "creationTimestamp": 1752060273222,
+      "customerInfo": {
+        "id": 1838722,
+        "alias": "Magic Customer2",
+        "firstName": "Magic",
+        "lastName": "Customer2",
+        "address": {
+          "country": "",
+          "state": "",
+          "county": "",
+          "city": "",
+          "postalCode": "",
+          "streetName": "",
+          "streetNumber": ""
+        },
+        "email": "magiccustomer2@example.com",
+        "phoneNumber": "+1202555018",
+        "location": [
+          48.870852,
+          2.356148
+        ],
+        "customData": ""
+      },
+      "location": [
+        48.827865,
+        2.379216
+      ],
+      "alias": "Magic Order2",
+      "firstName": "Magic2",
+      "lastName": "Order2",
+      "address": {
+        "country": "",
+        "state": "",
+        "county": "",
+        "city": "",
+        "postalCode": "",
+        "streetName": "",
+        "streetNumber": ""
+      },
+      "phoneNumber": "+1202555019",
+      "customData": "",
+      "type": 0,
+      "status": 0,
+      "state": 1,
+      "priority": 0,
+      "numberOfPackages": 2,
+      "weight": 4.5,
+      "cube": 1.1,
+      "revenue": 16,
+      "timeWindow": [
+        420,
+        1086
+      ],
+      "serviceTime": 0,
+      "depotId": 0
+    }
+  ]
+}
+```
 </CodeBlock>
 </div>
 ---
@@ -312,7 +505,128 @@ The **Order RestAPI** allows you to manage orders within the Fleet Management sy
 
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(GetOrders, null, 2)}
+```json
+{
+  "orders": [
+    {
+      "id": 879887,
+      "creationTimestamp": 1752060273222,
+      "customerInfo": {
+        "id": 1838721,
+        "alias": "Magic Customer",
+        "firstName": "Magic",
+        "lastName": "Customer",
+        "address": {
+          "country": "",
+          "state": "",
+          "county": "",
+          "city": "",
+          "postalCode": "",
+          "streetName": "",
+          "streetNumber": ""
+        },
+        "email": "magiccustomer@example.com",
+        "phoneNumber": "+1202555018",
+        "location": [
+          48.870852,
+          2.356148
+        ],
+        "customData": ""
+      },
+      "location": [
+        48.870852,
+        2.356148
+      ],
+      "alias": "Magic Order",
+      "firstName": "Magic",
+      "lastName": "Order",
+      "address": {
+        "country": "",
+        "state": "",
+        "county": "",
+        "city": "",
+        "postalCode": "",
+        "streetName": "",
+        "streetNumber": ""
+      },
+      "phoneNumber": "+1202555018",
+      "customData": "",
+      "type": 0,
+      "status": 0,
+      "state": 1,
+      "priority": 0,
+      "numberOfPackages": 3,
+      "weight": 5.1,
+      "cube": 2.5,
+      "revenue": 12,
+      "timeWindow": [
+        420,
+        1086
+      ],
+      "serviceTime": 0,
+      "depotId": 0
+    },
+    {
+      "id": 879888,
+      "creationTimestamp": 1752060273222,
+      "customerInfo": {
+        "id": 1838722,
+        "alias": "Magic Customer2",
+        "firstName": "Magic",
+        "lastName": "Customer2",
+        "address": {
+          "country": "",
+          "state": "",
+          "county": "",
+          "city": "",
+          "postalCode": "",
+          "streetName": "",
+          "streetNumber": ""
+        },
+        "email": "magiccustomer2@example.com",
+        "phoneNumber": "+1202555018",
+        "location": [
+          48.870852,
+          2.356148
+        ],
+        "customData": ""
+      },
+      "location": [
+        48.827865,
+        2.379216
+      ],
+      "alias": "Magic Order2",
+      "firstName": "Magic2",
+      "lastName": "Order2",
+      "address": {
+        "country": "",
+        "state": "",
+        "county": "",
+        "city": "",
+        "postalCode": "",
+        "streetName": "",
+        "streetNumber": ""
+      },
+      "phoneNumber": "+1202555019",
+      "customData": "",
+      "type": 0,
+      "status": 0,
+      "state": 1,
+      "priority": 0,
+      "numberOfPackages": 2,
+      "weight": 4.5,
+      "cube": 1.1,
+      "revenue": 16,
+      "timeWindow": [
+        420,
+        1086
+      ],
+      "serviceTime": 0,
+      "depotId": 0
+    }
+  ]
+}
+```
 </CodeBlock>
 </div>
 ---
@@ -370,7 +684,66 @@ The **Order RestAPI** allows you to manage orders within the Fleet Management sy
 
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(GetOrder, null, 2)}
+```json
+{
+  "id": 879887,
+  "creationTimestamp": 1752060273222,
+  "customerInfo": {
+    "id": 1838721,
+    "alias": "Magic Customer",
+    "firstName": "Magic",
+    "lastName": "Customer",
+    "address": {
+      "country": "",
+      "state": "",
+      "county": "",
+      "city": "",
+      "postalCode": "",
+      "streetName": "",
+      "streetNumber": ""
+    },
+    "email": "magiccustomer@example.com",
+    "phoneNumber": "+1202555018",
+    "location": [
+      48.870852,
+      2.356148
+    ],
+    "customData": ""
+  },
+  "location": [
+    48.870852,
+    2.356148
+  ],
+  "alias": "Magic Order",
+  "firstName": "Magic",
+  "lastName": "Order",
+  "address": {
+    "country": "",
+    "state": "",
+    "county": "",
+    "city": "",
+    "postalCode": "",
+    "streetName": "",
+    "streetNumber": ""
+  },
+  "phoneNumber": "+1202555018",
+  "customData": "",
+  "type": 0,
+  "status": 0,
+  "state": 1,
+  "priority": 0,
+  "numberOfPackages": 3,
+  "weight": 5.1,
+  "cube": 2.5,
+  "revenue": 12,
+  "timeWindow": [
+    420,
+    1086
+  ],
+  "serviceTime": 0,
+  "depotId": 0
+}
+```
 </CodeBlock>
 </div>
 
@@ -441,7 +814,66 @@ The **Order RestAPI** allows you to manage orders within the Fleet Management sy
 
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(GetOrder, null, 2)}
+```json
+{
+  "id": 879887,
+  "creationTimestamp": 1752060273222,
+  "customerInfo": {
+    "id": 1838721,
+    "alias": "Magic Customer",
+    "firstName": "Magic",
+    "lastName": "Customer",
+    "address": {
+      "country": "",
+      "state": "",
+      "county": "",
+      "city": "",
+      "postalCode": "",
+      "streetName": "",
+      "streetNumber": ""
+    },
+    "email": "magiccustomer@example.com",
+    "phoneNumber": "+1202555018",
+    "location": [
+      48.870852,
+      2.356148
+    ],
+    "customData": ""
+  },
+  "location": [
+    48.870852,
+    2.356148
+  ],
+  "alias": "Magic Order",
+  "firstName": "Magic",
+  "lastName": "Order",
+  "address": {
+    "country": "",
+    "state": "",
+    "county": "",
+    "city": "",
+    "postalCode": "",
+    "streetName": "",
+    "streetNumber": ""
+  },
+  "phoneNumber": "+1202555018",
+  "customData": "",
+  "type": 0,
+  "status": 0,
+  "state": 1,
+  "priority": 0,
+  "numberOfPackages": 3,
+  "weight": 5.1,
+  "cube": 2.5,
+  "revenue": 12,
+  "timeWindow": [
+    420,
+    1086
+  ],
+  "serviceTime": 0,
+  "depotId": 0
+}
+```
 </CodeBlock>
 </div>
 
@@ -449,7 +881,66 @@ The **Order RestAPI** allows you to manage orders within the Fleet Management sy
 
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(GetOrder, null, 2)}
+```json
+{
+  "id": 879887,
+  "creationTimestamp": 1752060273222,
+  "customerInfo": {
+    "id": 1838721,
+    "alias": "Magic Customer",
+    "firstName": "Magic",
+    "lastName": "Customer",
+    "address": {
+      "country": "",
+      "state": "",
+      "county": "",
+      "city": "",
+      "postalCode": "",
+      "streetName": "",
+      "streetNumber": ""
+    },
+    "email": "magiccustomer@example.com",
+    "phoneNumber": "+1202555018",
+    "location": [
+      48.870852,
+      2.356148
+    ],
+    "customData": ""
+  },
+  "location": [
+    48.870852,
+    2.356148
+  ],
+  "alias": "Magic Order",
+  "firstName": "Magic",
+  "lastName": "Order",
+  "address": {
+    "country": "",
+    "state": "",
+    "county": "",
+    "city": "",
+    "postalCode": "",
+    "streetName": "",
+    "streetNumber": ""
+  },
+  "phoneNumber": "+1202555018",
+  "customData": "",
+  "type": 0,
+  "status": 0,
+  "state": 1,
+  "priority": 0,
+  "numberOfPackages": 3,
+  "weight": 5.1,
+  "cube": 2.5,
+  "revenue": 12,
+  "timeWindow": [
+    420,
+    1086
+  ],
+  "serviceTime": 0,
+  "depotId": 0
+}
+```
 </CodeBlock>
 </div>
 

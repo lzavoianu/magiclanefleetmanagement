@@ -2,11 +2,10 @@
 sidebar_position: 11
 ---
 
-import { AddTemplateParameters } from './_data/template';
-import { GetTemplatesParameters } from './_data/template';
-import { GetTemplateParameters } from './_data/template';
-import CodeBlock from '@theme/CodeBlock';
-import ReadingTime from '../../src/components/reading-time/reading-time';
+
+
+
+
 
 # Template Parameters
 
@@ -203,7 +202,25 @@ The **Template RestAPI** allows you to manage templates within the Fleet Managem
 - **Request Body:**
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(AddTemplateParameters, null, 2)}
+```json
+{
+  "name": "Paris - test Optimization 50 vehicles in Berlin",
+  "ignoreTimeWindow": false,
+  "balancedRoutes": 0,
+  "optimizationCriterion": 1,
+  "arrangeCriterion": 0,
+  "optimizationQuality": 2,
+  "maxTimeToOptimize": 600,
+  "maxWaitTime": 800,
+  "routeType": 2,
+  "matrixBuiltType": 1,
+  "restrictions": 0,
+  "vehicleCategory": 0,
+  "sameDepartureForAll": false,
+  "sameDestinationForAll": false,
+  "sameVehicleConstraintsForAll": true
+}
+```
 </CodeBlock>
 </div>
 
@@ -211,7 +228,26 @@ The **Template RestAPI** allows you to manage templates within the Fleet Managem
 
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(GetTemplateParameters, null, 2)}
+```json
+{
+  "id": 87988,
+  "name": "Paris - test Optimization 50 vehicles in Berlin",
+  "ignoreTimeWindow": false,
+  "balancedRoutes": 0,
+  "optimizationCriterion": 1,
+  "arrangeCriterion": 0,
+  "optimizationQuality": 2,
+  "maxTimeToOptimize": 600,
+  "maxWaitTime": 800,
+  "routeType": 2,
+  "matrixBuiltType": 1,
+  "restrictions": 0,
+  "vehicleCategory": 0,
+  "sameDepartureForAll": false,
+  "sameDestinationForAll": false,
+  "sameVehicleConstraintsForAll": true
+}
+```
 </CodeBlock>
 </div>
 ---
@@ -279,7 +315,48 @@ The **Template RestAPI** allows you to manage templates within the Fleet Managem
 
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(GetTemplatesParameters, null, 2)}
+```json
+{
+  "templatesParameters": [
+    {
+      "id": 87987,
+      "name": "Paris - test Optimization 50 vehicles in Berlin",
+      "ignoreTimeWindow": false,
+      "balancedRoutes": 0,
+      "optimizationCriterion": 1,
+      "arrangeCriterion": 0,
+      "optimizationQuality": 2,
+      "maxTimeToOptimize": 600,
+      "maxWaitTime": 800,
+      "routeType": 2,
+      "matrixBuiltType": 1,
+      "restrictions": 0,
+      "vehicleCategory": 0,
+      "sameDepartureForAll": false,
+      "sameDestinationForAll": false,
+      "sameVehicleConstraintsForAll": true
+    },
+    {
+      "id": 87988,
+      "name": "Paris - test Optimization 25 vehicles in Berlin",
+      "ignoreTimeWindow": false,
+      "balancedRoutes": 0,
+      "optimizationCriterion": 1,
+      "arrangeCriterion": 0,
+      "optimizationQuality": 2,
+      "maxTimeToOptimize": 600,
+      "maxWaitTime": 800,
+      "routeType": 2,
+      "matrixBuiltType": 1,
+      "restrictions": 0,
+      "vehicleCategory": 0,
+      "sameDepartureForAll": false,
+      "sameDestinationForAll": false,
+      "sameVehicleConstraintsForAll": true
+    }
+  ]
+}
+```
 </CodeBlock>
 </div>
 
@@ -338,7 +415,26 @@ The **Template RestAPI** allows you to manage templates within the Fleet Managem
 
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(GetTemplateParameters, null, 2)}
+```json
+{
+  "id": 87988,
+  "name": "Paris - test Optimization 50 vehicles in Berlin",
+  "ignoreTimeWindow": false,
+  "balancedRoutes": 0,
+  "optimizationCriterion": 1,
+  "arrangeCriterion": 0,
+  "optimizationQuality": 2,
+  "maxTimeToOptimize": 600,
+  "maxWaitTime": 800,
+  "routeType": 2,
+  "matrixBuiltType": 1,
+  "restrictions": 0,
+  "vehicleCategory": 0,
+  "sameDepartureForAll": false,
+  "sameDestinationForAll": false,
+  "sameVehicleConstraintsForAll": true
+}
+```
 </CodeBlock>
 </div>
 ---
@@ -397,7 +493,26 @@ The **Template RestAPI** allows you to manage templates within the Fleet Managem
 
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(GetTemplateParameters, null, 2)}
+```json
+{
+  "id": 87988,
+  "name": "Paris - test Optimization 50 vehicles in Berlin",
+  "ignoreTimeWindow": false,
+  "balancedRoutes": 0,
+  "optimizationCriterion": 1,
+  "arrangeCriterion": 0,
+  "optimizationQuality": 2,
+  "maxTimeToOptimize": 600,
+  "maxWaitTime": 800,
+  "routeType": 2,
+  "matrixBuiltType": 1,
+  "restrictions": 0,
+  "vehicleCategory": 0,
+  "sameDepartureForAll": false,
+  "sameDestinationForAll": false,
+  "sameVehicleConstraintsForAll": true
+}
+```
 </CodeBlock>
 </div>
 

@@ -2,14 +2,13 @@
 sidebar_position: 9
 ---
 
-import { AddTerritories } from './_data/territory';
-import { GetTerritory } from './_data/territory';
-import { GetTerritories } from './_data/territory';
-import { GenerateTerritories } from './_data/territory';
-import { GeneratedTerritories } from './_data/territory';
-import { GetOrders } from './_data/order';
-import CodeBlock from '@theme/CodeBlock';
-import ReadingTime from '../../src/components/reading-time/reading-time';
+
+
+
+
+
+
+
 
 # Territory
 
@@ -22,7 +21,6 @@ The **Territory RestAPI** allows you to manage territories within the Fleet Mana
 
 ### Territory Object Fields
 
-import React from 'react';
 
 <table>
   <thead>
@@ -133,7 +131,48 @@ import React from 'react';
 
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(AddTerritories, null, 2)}
+```json
+[
+  {
+    "name": "North Region",
+    "type": 1,
+    "data": [
+      [
+        48.827865,
+        2.379216
+      ],
+      [
+        48.43446,
+        5.234103
+      ]
+    ],
+    "color": "#FF5733"
+  },
+  {
+    "name": "South Region",
+    "type": 2,
+    "data": [
+      [
+        48.88025,
+        2.299601
+      ],
+      [
+        48.897163,
+        2.292865
+      ],
+      [
+        46.199373,
+        0.069986
+      ],
+      [
+        47.602138,
+        2.330583
+      ]
+    ],
+    "color": "#FF5723"
+  }
+]
+```
 </CodeBlock>
 </div>
 
@@ -141,7 +180,169 @@ import React from 'react';
 
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(GetTerritories, null, 2)}
+```json
+{
+  "territories": [
+    {
+      "name": "North Region",
+      "type": 1,
+      "data": [
+        [
+          48.827865,
+          2.379216
+        ],
+        [
+          48.43446,
+          5.234103
+        ]
+      ],
+      "color": "#FF5733",
+      "orders": [
+        {
+          "id": 879887,
+          "creationTimestamp": 1752060273222,
+          "customerInfo": {
+            "id": 1838721,
+            "alias": "Magic Customer",
+            "firstName": "Magic",
+            "lastName": "Customer",
+            "address": {
+              "country": "",
+              "state": "",
+              "county": "",
+              "city": "",
+              "postalCode": "",
+              "streetName": "",
+              "streetNumber": ""
+            },
+            "email": "magiccustomer@example.com",
+            "phoneNumber": "+1202555018",
+            "location": [
+              48.870852,
+              2.356148
+            ],
+            "customData": ""
+          },
+          "location": [
+            48.870852,
+            2.356148
+          ],
+          "alias": "Magic Order",
+          "firstName": "Magic",
+          "lastName": "Order",
+          "address": {
+            "country": "",
+            "state": "",
+            "county": "",
+            "city": "",
+            "postalCode": "",
+            "streetName": "",
+            "streetNumber": ""
+          },
+          "phoneNumber": "+1202555018",
+          "customData": "",
+          "type": 0,
+          "status": 0,
+          "state": 1,
+          "priority": 0,
+          "numberOfPackages": 3,
+          "weight": 5.1,
+          "cube": 2.5,
+          "revenue": 12,
+          "timeWindow": [
+            420,
+            1086
+          ],
+          "serviceTime": 0,
+          "depotId": 0
+        },
+        {
+          "id": 879888,
+          "creationTimestamp": 1752060273222,
+          "customerInfo": {
+            "id": 1838722,
+            "alias": "Magic Customer2",
+            "firstName": "Magic",
+            "lastName": "Customer2",
+            "address": {
+              "country": "",
+              "state": "",
+              "county": "",
+              "city": "",
+              "postalCode": "",
+              "streetName": "",
+              "streetNumber": ""
+            },
+            "email": "magiccustomer2@example.com",
+            "phoneNumber": "+1202555018",
+            "location": [
+              48.870852,
+              2.356148
+            ],
+            "customData": ""
+          },
+          "location": [
+            48.827865,
+            2.379216
+          ],
+          "alias": "Magic Order2",
+          "firstName": "Magic2",
+          "lastName": "Order2",
+          "address": {
+            "country": "",
+            "state": "",
+            "county": "",
+            "city": "",
+            "postalCode": "",
+            "streetName": "",
+            "streetNumber": ""
+          },
+          "phoneNumber": "+1202555019",
+          "customData": "",
+          "type": 0,
+          "status": 0,
+          "state": 1,
+          "priority": 0,
+          "numberOfPackages": 2,
+          "weight": 4.5,
+          "cube": 1.1,
+          "revenue": 16,
+          "timeWindow": [
+            420,
+            1086
+          ],
+          "serviceTime": 0,
+          "depotId": 0
+        }
+      ]
+    },
+    {
+      "name": "South Region",
+      "type": 2,
+      "data": [
+        [
+          48.88025,
+          2.299601
+        ],
+        [
+          48.897163,
+          2.292865
+        ],
+        [
+          46.199373,
+          0.069986
+        ],
+        [
+          47.602138,
+          2.330583
+        ]
+      ],
+      "color": "#FF5723",
+      "orders": []
+    }
+  ]
+}
+```
 </CodeBlock>
 </div>
 
@@ -207,7 +408,169 @@ import React from 'react';
 
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(GetTerritories, null, 2)}
+```json
+{
+  "territories": [
+    {
+      "name": "North Region",
+      "type": 1,
+      "data": [
+        [
+          48.827865,
+          2.379216
+        ],
+        [
+          48.43446,
+          5.234103
+        ]
+      ],
+      "color": "#FF5733",
+      "orders": [
+        {
+          "id": 879887,
+          "creationTimestamp": 1752060273222,
+          "customerInfo": {
+            "id": 1838721,
+            "alias": "Magic Customer",
+            "firstName": "Magic",
+            "lastName": "Customer",
+            "address": {
+              "country": "",
+              "state": "",
+              "county": "",
+              "city": "",
+              "postalCode": "",
+              "streetName": "",
+              "streetNumber": ""
+            },
+            "email": "magiccustomer@example.com",
+            "phoneNumber": "+1202555018",
+            "location": [
+              48.870852,
+              2.356148
+            ],
+            "customData": ""
+          },
+          "location": [
+            48.870852,
+            2.356148
+          ],
+          "alias": "Magic Order",
+          "firstName": "Magic",
+          "lastName": "Order",
+          "address": {
+            "country": "",
+            "state": "",
+            "county": "",
+            "city": "",
+            "postalCode": "",
+            "streetName": "",
+            "streetNumber": ""
+          },
+          "phoneNumber": "+1202555018",
+          "customData": "",
+          "type": 0,
+          "status": 0,
+          "state": 1,
+          "priority": 0,
+          "numberOfPackages": 3,
+          "weight": 5.1,
+          "cube": 2.5,
+          "revenue": 12,
+          "timeWindow": [
+            420,
+            1086
+          ],
+          "serviceTime": 0,
+          "depotId": 0
+        },
+        {
+          "id": 879888,
+          "creationTimestamp": 1752060273222,
+          "customerInfo": {
+            "id": 1838722,
+            "alias": "Magic Customer2",
+            "firstName": "Magic",
+            "lastName": "Customer2",
+            "address": {
+              "country": "",
+              "state": "",
+              "county": "",
+              "city": "",
+              "postalCode": "",
+              "streetName": "",
+              "streetNumber": ""
+            },
+            "email": "magiccustomer2@example.com",
+            "phoneNumber": "+1202555018",
+            "location": [
+              48.870852,
+              2.356148
+            ],
+            "customData": ""
+          },
+          "location": [
+            48.827865,
+            2.379216
+          ],
+          "alias": "Magic Order2",
+          "firstName": "Magic2",
+          "lastName": "Order2",
+          "address": {
+            "country": "",
+            "state": "",
+            "county": "",
+            "city": "",
+            "postalCode": "",
+            "streetName": "",
+            "streetNumber": ""
+          },
+          "phoneNumber": "+1202555019",
+          "customData": "",
+          "type": 0,
+          "status": 0,
+          "state": 1,
+          "priority": 0,
+          "numberOfPackages": 2,
+          "weight": 4.5,
+          "cube": 1.1,
+          "revenue": 16,
+          "timeWindow": [
+            420,
+            1086
+          ],
+          "serviceTime": 0,
+          "depotId": 0
+        }
+      ]
+    },
+    {
+      "name": "South Region",
+      "type": 2,
+      "data": [
+        [
+          48.88025,
+          2.299601
+        ],
+        [
+          48.897163,
+          2.292865
+        ],
+        [
+          46.199373,
+          0.069986
+        ],
+        [
+          47.602138,
+          2.330583
+        ]
+      ],
+      "color": "#FF5723",
+      "orders": []
+    }
+  ]
+}
+```
 </CodeBlock>
 </div>
 ---
@@ -456,7 +819,77 @@ import React from 'react';
 - **Request Body:**
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(GenerateTerritories, null, 2)}
+```json
+{
+  "locations": [
+    [
+      48.870852,
+      2.356148
+    ],
+    [
+      48.827327,
+      2.342267
+    ],
+    [
+      48.88025,
+      2.299601
+    ],
+    [
+      48.845198,
+      2.402896
+    ],
+    [
+      48.887096,
+      2.283513
+    ],
+    [
+      48.896894,
+      2.321586
+    ],
+    [
+      48.870449,
+      2.342204
+    ],
+    [
+      48.895658,
+      2.344043
+    ],
+    [
+      48.458357,
+      -0.054451
+    ],
+    [
+      45.049782,
+      2.475759
+    ],
+    [
+      46.199373,
+      0.069986
+    ],
+    [
+      47.602138,
+      2.330583
+    ],
+    [
+      44.346051,
+      4.694878
+    ],
+    [
+      44.464582,
+      2.45502
+    ],
+    [
+      48.43446,
+      5.234103
+    ],
+    [
+      49.161539,
+      0.50058
+    ]
+  ],
+  "territoriesNumber": 3
+}
+```
 </CodeBlock>
 </div>
 
@@ -464,7 +897,100 @@ import React from 'react';
 
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(GeneratedTerritories, null, 2)}
+```json
+{
+  "territories": [
+    {
+      "id": 879888,
+      "name": "Territory 0",
+      "type": 0,
+      "data": [
+        [
+          44.464582,
+          2.45502
+        ],
+        [
+          48.887096,
+          2.283513
+        ],
+        [
+          48.896894,
+          2.321586
+        ],
+        [
+          48.870449,
+          2.342204
+        ],
+        [
+          48.895658,
+          2.344043
+        ]
+      ],
+      "color": "#FF5733"
+    },
+    {
+      "id": 879887,
+      "name": "Territory 1",
+      "type": 0,
+      "data": [
+        [
+          49.161539,
+          0.50058
+        ],
+        [
+          44.346051,
+          4.694878
+        ],
+        [
+          48.870852,
+          2.356148
+        ],
+        [
+          48.827327,
+          2.342267
+        ],
+        [
+          48.88025,
+          2.299601
+        ],
+        [
+          48.845198,
+          2.402896
+        ]
+      ],
+      "color": "#FF5723"
+    },
+    {
+      "id": 879886,
+      "name": "Territory 2",
+      "type": 0,
+      "data": [
+        [
+          48.43446,
+          5.234103
+        ],
+        [
+          48.458357,
+          -0.054451
+        ],
+        [
+          45.049782,
+          2.475759
+        ],
+        [
+          46.199373,
+          0.069986
+        ],
+        [
+          47.602138,
+          2.330583
+        ]
+      ],
+      "color": "#FF5743"
+    }
+  ]
+}
+```
 </CodeBlock>
 </div>
 ---
@@ -516,7 +1042,128 @@ import React from 'react';
 
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(GetOrders, null, 2)}
+```json
+{
+  "orders": [
+    {
+      "id": 879887,
+      "creationTimestamp": 1752060273222,
+      "customerInfo": {
+        "id": 1838721,
+        "alias": "Magic Customer",
+        "firstName": "Magic",
+        "lastName": "Customer",
+        "address": {
+          "country": "",
+          "state": "",
+          "county": "",
+          "city": "",
+          "postalCode": "",
+          "streetName": "",
+          "streetNumber": ""
+        },
+        "email": "magiccustomer@example.com",
+        "phoneNumber": "+1202555018",
+        "location": [
+          48.870852,
+          2.356148
+        ],
+        "customData": ""
+      },
+      "location": [
+        48.870852,
+        2.356148
+      ],
+      "alias": "Magic Order",
+      "firstName": "Magic",
+      "lastName": "Order",
+      "address": {
+        "country": "",
+        "state": "",
+        "county": "",
+        "city": "",
+        "postalCode": "",
+        "streetName": "",
+        "streetNumber": ""
+      },
+      "phoneNumber": "+1202555018",
+      "customData": "",
+      "type": 0,
+      "status": 0,
+      "state": 1,
+      "priority": 0,
+      "numberOfPackages": 3,
+      "weight": 5.1,
+      "cube": 2.5,
+      "revenue": 12,
+      "timeWindow": [
+        420,
+        1086
+      ],
+      "serviceTime": 0,
+      "depotId": 0
+    },
+    {
+      "id": 879888,
+      "creationTimestamp": 1752060273222,
+      "customerInfo": {
+        "id": 1838722,
+        "alias": "Magic Customer2",
+        "firstName": "Magic",
+        "lastName": "Customer2",
+        "address": {
+          "country": "",
+          "state": "",
+          "county": "",
+          "city": "",
+          "postalCode": "",
+          "streetName": "",
+          "streetNumber": ""
+        },
+        "email": "magiccustomer2@example.com",
+        "phoneNumber": "+1202555018",
+        "location": [
+          48.870852,
+          2.356148
+        ],
+        "customData": ""
+      },
+      "location": [
+        48.827865,
+        2.379216
+      ],
+      "alias": "Magic Order2",
+      "firstName": "Magic2",
+      "lastName": "Order2",
+      "address": {
+        "country": "",
+        "state": "",
+        "county": "",
+        "city": "",
+        "postalCode": "",
+        "streetName": "",
+        "streetNumber": ""
+      },
+      "phoneNumber": "+1202555019",
+      "customData": "",
+      "type": 0,
+      "status": 0,
+      "state": 1,
+      "priority": 0,
+      "numberOfPackages": 2,
+      "weight": 4.5,
+      "cube": 1.1,
+      "revenue": 16,
+      "timeWindow": [
+        420,
+        1086
+      ],
+      "serviceTime": 0,
+      "depotId": 0
+    }
+  ]
+}
+```
 </CodeBlock>
 </div>
 

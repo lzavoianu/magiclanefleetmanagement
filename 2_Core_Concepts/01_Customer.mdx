@@ -2,12 +2,11 @@
 sidebar_position: 1
 ---
 
-import { AddCustomers } from './_data/customer';
-import { GetCustomers } from './_data/customer';
-import { GetCustomer } from './_data/customer';
-import { OrderHistory } from './_data/customer';
-import CodeBlock from '@theme/CodeBlock';
-import ReadingTime from '../../src/components/reading-time/reading-time';
+
+
+
+
+
 
 # Customer
 
@@ -141,7 +140,53 @@ The **Customer RestAPI** allows you to manage customer records within the Fleet 
 
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(AddCustomers, null, 2)}
+```json
+[
+  {
+    "alias": "Magic Customer",
+    "firstName": "Magic",
+    "lastName": "Customer",
+    "address": {
+      "country": "France",
+      "state": "Île-de-France",
+      "county": "Paris",
+      "city": "Paris",
+      "postalCode": "75010",
+      "streetName": "Rue Gustave Goublier",
+      "streetNumber": "2",
+      "extra": ""
+    },
+    "email": "magiccustomer@example.com",
+    "phoneNumber": "+1202555018",
+    "location": [
+      48.870852,
+      2.356148
+    ],
+    "customData": ""
+  },
+  {
+    "alias": "Magic Customer 2",
+    "firstName": "Magic",
+    "lastName": "Customer 2",
+    "address": {
+      "country": "",
+      "state": "",
+      "county": "",
+      "city": "",
+      "postalCode": "",
+      "streetName": "",
+      "streetNumber": ""
+    },
+    "email": "magiccustomer2@example.com",
+    "phoneNumber": "+1202555018",
+    "location": [
+      48.870852,
+      2.356148
+    ],
+    "customData": "communicationPreference: email"
+  }
+]
+```
 </CodeBlock>
 </div>
 
@@ -149,7 +194,57 @@ The **Customer RestAPI** allows you to manage customer records within the Fleet 
 	
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(GetCustomers, null, 2)}
+```json
+{
+  "customers": [
+    {
+      "id": 1838721,
+      "alias": "Magic Customer",
+      "firstName": "Magic",
+      "lastName": "Customer",
+      "address": {
+        "country": "France",
+        "state": "Île-de-France",
+        "county": "Paris",
+        "city": "Paris",
+        "postalCode": "75010",
+        "streetName": "Rue Gustave Goublier",
+        "streetNumber": "2",
+        "extra": ""
+      },
+      "email": "magiccustomer@example.com",
+      "phoneNumber": "+1202555018",
+      "location": [
+        48.870852,
+        2.356148
+      ],
+      "customData": ""
+    },
+    {
+      "id": 1838722,
+      "alias": "Magic Customer2",
+      "firstName": "Magic",
+      "lastName": "Customer2",
+      "address": {
+        "country": "",
+        "state": "",
+        "county": "",
+        "city": "",
+        "postalCode": "",
+        "streetName": "",
+        "streetNumber": ""
+      },
+      "email": "magiccustomer2@example.com",
+      "phoneNumber": "+1202555018",
+      "location": [
+        48.870852,
+        2.356148
+      ],
+      "customData": "communicationPreference: email"
+    }
+  ]
+}
+```
 </CodeBlock>
 </div>
 
@@ -226,7 +321,57 @@ The **Customer RestAPI** allows you to manage customer records within the Fleet 
 
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(GetCustomers, null, 2)}
+```json
+{
+  "customers": [
+    {
+      "id": 1838721,
+      "alias": "Magic Customer",
+      "firstName": "Magic",
+      "lastName": "Customer",
+      "address": {
+        "country": "France",
+        "state": "Île-de-France",
+        "county": "Paris",
+        "city": "Paris",
+        "postalCode": "75010",
+        "streetName": "Rue Gustave Goublier",
+        "streetNumber": "2",
+        "extra": ""
+      },
+      "email": "magiccustomer@example.com",
+      "phoneNumber": "+1202555018",
+      "location": [
+        48.870852,
+        2.356148
+      ],
+      "customData": ""
+    },
+    {
+      "id": 1838722,
+      "alias": "Magic Customer2",
+      "firstName": "Magic",
+      "lastName": "Customer2",
+      "address": {
+        "country": "",
+        "state": "",
+        "county": "",
+        "city": "",
+        "postalCode": "",
+        "streetName": "",
+        "streetNumber": ""
+      },
+      "email": "magiccustomer2@example.com",
+      "phoneNumber": "+1202555018",
+      "location": [
+        48.870852,
+        2.356148
+      ],
+      "customData": "communicationPreference: email"
+    }
+  ]
+}
+```
 </CodeBlock>
 </div>
 
@@ -285,7 +430,31 @@ The **Customer RestAPI** allows you to manage customer records within the Fleet 
   
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(GetCustomer, null, 2)}
+```json
+{
+  "id": 1838721,
+  "alias": "Magic Customer",
+  "firstName": "Magic",
+  "lastName": "Customer",
+  "address": {
+    "country": "France",
+    "state": "Île-de-France",
+    "county": "Paris",
+    "city": "Paris",
+    "postalCode": "75010",
+    "streetName": "Rue Gustave Goublier",
+    "streetNumber": "2",
+    "extra": ""
+  },
+  "email": "magiccustomer@example.com",
+  "phoneNumber": "+1202555018",
+  "location": [
+    48.870852,
+    2.356148
+  ],
+  "customData": ""
+}
+```
 </CodeBlock>
 </div>
 
@@ -350,7 +519,31 @@ The **Customer RestAPI** allows you to manage customer records within the Fleet 
 - **Request Body:**
 <div style={{ maxHeight: "400px", overflowY: "auto", background: "#f6f8fa", padding: "10px", borderRadius: "5px" }}>
 <CodeBlock language="json">
-{JSON.stringify(GetCustomer, null, 2)}
+```json
+{
+  "id": 1838721,
+  "alias": "Magic Customer",
+  "firstName": "Magic",
+  "lastName": "Customer",
+  "address": {
+    "country": "France",
+    "state": "Île-de-France",
+    "county": "Paris",
+    "city": "Paris",
+    "postalCode": "75010",
+    "streetName": "Rue Gustave Goublier",
+    "streetNumber": "2",
+    "extra": ""
+  },
+  "email": "magiccustomer@example.com",
+  "phoneNumber": "+1202555018",
+  "location": [
+    48.870852,
+    2.356148
+  ],
+  "customData": ""
+}
+```
 </CodeBlock>
 </div>
 
